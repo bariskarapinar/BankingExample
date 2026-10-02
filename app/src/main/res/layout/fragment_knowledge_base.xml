@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="12dp"
+    android:background="@color/background_light">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Article 1: EMV 10 Adımlı Yaşam Döngüsü -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp"
+            android:layout_marginBottom="12dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1. EMV Akıllı Kart İşlem Adımları (Lifecycle)"
+                    android:textColor="@color/primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1. Application Selection: PSE (12PAY.SYS.DDF01) veya PPSE okuma.\n2. Initiate Processing: GPO gönderimi ile AIP (Tag 82) ve AFL (Tag 94) alma.\n3. Read Record: AFL rehberliğinde kart rekorlarından PAN, Expiry, Certificate okuma.\n4. Offline Data Auth: SDA (Static), DDA (Dynamic), CDA (Combined) RSA imzası doğrulama.\n5. Processing Restrictions: Son kullanma tarihi ve sürüm kontrolleri.\n6. Cardholder Verification (CVM): Online PIN, Offline PIN, CDCVM veya İmza kontrolü.\n7. Terminal Risk Mgmt: Floor limit ve rastgele online seçimi.\n8. First Generate AC: TVR değerlendirmesi ve ARQC/TC/AAC üretimi.\n9. Online Processing: Field 55 içinde ARQC'yi Host'a iletme ve ARPC alma.\n10. Second Generate AC: Host cevabına göre kartın nihai kararı (TC/AAC)."
+                    android:textColor="@color/text_primary"
+                    android:textSize="12sp"
+                    android:layout_marginTop="6dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Article 2: ISO 8583 Mesaj Yapısı ve MTI -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp"
+            android:layout_marginBottom="12dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2. ISO 8583 Standart Yapısı ve MTI"
+                    android:textColor="@color/primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ISO 8583 mesajları 3 ana bileşenden oluşur:\n• MTI (Message Type Identifier): 4 basamaklı mesaj sınıfı (Örn: 0100 Auth, 0200 Financial, 0800 Network).\n  - Hane 1: ISO Versiyonu (0=1987, 1=1993, 2=2003)\n  - Hane 2: Mesaj Sınıfı (1=Auth, 2=Financial, 4=Reversal, 8=Network)\n  - Hane 3: İşlev (0=Request, 1=Response, 2=Advice)\n  - Hane 4: Kaynak (0=Acquirer, 2=Issuer)\n• Primary Bitmap (64 Bit / 8 Bayt): Hangi sahaların pakette var olduğunu belirten bit haritası. Bit 1 aktifse 128 bitlik Secondary Bitmap var demektir.\n• Data Elements (Sahalar 1 - 128): Sabit (FIXED) veya Değişken (LLVAR 2 hane boy, LLLVAR 3 hane boy) uzunluktaki veriler."
+                    android:textColor="@color/text_primary"
+                    android:textSize="12sp"
+                    android:layout_marginTop="6dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Article 3: Field 55 EMV Entegrasyonu -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp"
+            android:layout_marginBottom="12dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="3. ISO 8583 Saha 55 (Field 55) &amp; EMV Kriptografisi"
+                    android:textColor="@color/primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Saha 55 (Field 55), EMV çip kart verilerinin ISO 8583 mesajı içerisinde pakete eklendiği LLLVAR binary sahadır.\nİstekte Kritik EMV Tag'leri:\n• Tag 9F26: ARQC (Application Cryptogram)\n• Tag 9F27: CID (Cryptogram Information Data - 80=ARQC)\n• Tag 9F10: IAD (Issuer Application Data)\n• Tag 9F37: UN (Unpredictable Number - Rastgele Sayı)\n• Tag 9F36: ATC (Application Transaction Counter)\n• Tag 95: TVR (Terminal Verification Results)\n\nCevapta Dönüş Tag'leri:\n• Tag 91: ARPC (Issuer Authentication Data - Host Kriptogramı)\n• Tag 8A: ARC (Authorization Response Code - '00' Onay)."
+                    android:textColor="@color/text_primary"
+                    android:textSize="12sp"
+                    android:layout_marginTop="6dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Article 4: PIN Block Formatları -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp"
+            android:layout_marginBottom="12dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4. PIN Block Formatları (ISO 9564-1)"
+                    android:textColor="@color/primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ISO 8583 Saha 52 içerisinde şifreli olarak taşınan PIN bloğu formatları:\n• Format 0 (ISO-0 / ANSI X9.8): PIN Bloğu (04 PIN F... F) XOR (0000 + PAN sağdan 12 hane).\n• Format 1: Rastgele doldurma içerir, PAN ile XOR uygulanmaz.\n• Format 3: Format 0 benzeri olup rastgele basamaklarla güçlendirilmiştir."
+                    android:textColor="@color/text_primary"
+                    android:textSize="12sp"
+                    android:layout_marginTop="6dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+</ScrollView>
