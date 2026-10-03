@@ -2,6 +2,19 @@
 
 An ultra-comprehensive, production-grade, pure Java Android reference application and educational textbook covering the complete specifications, cryptography, message formats, byte structures, and end-to-end transaction flows for **EMV (Chip & Contactless Smart Card Standard)** and **ISO 8583 (Financial Transaction Card Originated Messages)** protocols.
 
+![Java](https://img.shields.io/badge/Language-Pure%20Java%2011+-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
+![Android SDK](https://img.shields.io/badge/Platform-Android%20API%2024%20--%2036-3DDC84?style=for-the-badge&logo=android&logoColor=white)
+![EMVCo](https://img.shields.io/badge/Standard-EMVCo%20Book%201--4-0A2540?style=for-the-badge)
+![ISO 8583](https://img.shields.io/badge/Interchange-ISO%208583--1%3A1987-1E293B?style=for-the-badge)
+![JUnit 4](https://img.shields.io/badge/Unit%20Tests-12%2F12%20Passed-25A162?style=for-the-badge&logo=junit5&logoColor=white)
+
+![Visa](https://img.shields.io/badge/VISA-VSDC%20%2F%20qVSDC-1A1F71?style=for-the-badge&logo=visa&logoColor=white)
+![Mastercard](https://img.shields.io/badge/Mastercard-M%2FChip%20%2F%20PayPass-EB001B?style=for-the-badge&logo=mastercard&logoColor=white)
+![Troy](https://img.shields.io/badge/Troy-Domestic%20Scheme%20Turkey-E30613?style=for-the-badge)
+![Amex](https://img.shields.io/badge/Amex-AEIPS%20%2F%20ExpressPay-006FCF?style=for-the-badge&logo=american-express&logoColor=white)
+![Discover](https://img.shields.io/badge/Discover-D--PAS-FF6000?style=for-the-badge&logo=discover&logoColor=white)
+![JCB](https://img.shields.io/badge/JCB-J%2FSmart-003D7A?style=for-the-badge&logo=jcb&logoColor=white)
+
 ---
 
 ## Table of Contents
@@ -34,6 +47,21 @@ An ultra-comprehensive, production-grade, pure Java Android reference applicatio
 6. [Application Architecture & Java Package Map](#6-application-architecture--java-package-map)
 7. [Unit Testing & Verification Strategy](#7-unit-testing--verification-strategy)
 8. [Build & Installation Guide](#8-build--installation-guide)
+9. [Payment Networks & Card Scheme Specifications](#9-payment-networks--card-scheme-specifications)
+   - [9.1 Visa (VSDC & qVSDC)](#91-visa-vsdc--qvsdc)
+   - [9.2 Mastercard (M/Chip & PayPass)](#92-mastercard-mchip--paypass)
+   - [9.3 Troy (Turkey Domestic Scheme)](#93-troy-turkey-domestic-scheme)
+   - [9.4 American Express (AEIPS & ExpressPay)](#94-american-express-aeips--expresspay)
+   - [9.5 Discover & JCB Specifications](#95-discover--jcb-specifications)
+10. [EMV Action Codes & Terminal Decision Logic (IAC / TAC)](#10-emv-action-codes--terminal-decision-logic-iac--tac)
+11. [Card Security Codes & Cryptography (CVV, CVC, iCVV, dCVV)](#11-card-security-codes--cryptography-cvv-cvc-icvv-dcvv)
+12. [Magnetic Stripe Tracks Specification (Track 1, Track 2, Track 3)](#12-magnetic-stripe-tracks-specification-track-1-track-2-track-3)
+13. [ISO 8583 Dialects & Payment Network Variants](#13-iso-8583-dialects--payment-network-variants)
+14. [EMV APDU Command & Response State Machine Diagram](#14-emv-apdu-command--response-state-machine-diagram)
+15. [Primary Bitmap 128-Bit Visual Bit Grid Matrix](#15-primary-bitmap-128-bit-visual-bit-grid-matrix)
+16. [Key Hierarchy & Derivation Architecture Diagram](#16-key-hierarchy--derivation-architecture-diagram)
+17. [Payment Terminal Hardware & Contactless NFC Layer Stack](#17-payment-terminal-hardware--contactless-nfc-layer-stack)
+18. [Cardholder Verification Method (CVM) Decision Flowchart](#18-cardholder-verification-method-cvm-decision-flowchart)
 
 ---
 
@@ -705,6 +733,342 @@ The application features comprehensive JUnit 4 unit tests validating all core pr
    ```bash
    ./gradlew app:installDebug
    ```
+
+---
+
+## 9. Payment Networks & Card Scheme Specifications
+
+```
+  +---------------------------------------------------------------------------------+
+  |                       INTERNATIONAL & DOMESTIC SCHEMES                          |
+  |  [VISA]        [MASTERCARD]        [TROY]        [AMEX]       [DISCOVER / JCB]   |
+  | VSDC/qVSDC     M/Chip PayPass    Turkey BKM   AEIPS/ExPay       D-PAS / J-Smart   |
+  +---------------------------------------------------------------------------------+
+```
+
+### 9.1 Visa (VSDC & qVSDC)
+
+![Visa Logo](https://img.shields.io/badge/VISA-VSDC%20%2F%20qVSDC-1A1F71?style=for-the-badge&logo=visa&logoColor=white)
+
+Visa Smart Debit/Credit (**VSDC**) is Visa's EMV implementation for contact chip transactions, while **qVSDC** (Quick Visa Smart Debit/Credit) governs Visa contactless NFC transactions.
+
+#### Key Visa Application Identifiers (AIDs):
+- **Visa Credit / Debit**: `A0000000031010`
+- **Visa Electron**: `A0000000032010`
+- **V PAY**: `A0000000032020`
+- **Visa Interlink**: `A0000000033010`
+
+#### Terminal Transaction Qualifiers (TTQ - Tag 9F66):
+In qVSDC contactless transactions, Tag `9F66` is sent by the terminal in GPO to indicate supported contactless modes:
+- **Byte 1 Bit 8 (`0x80`)**: qVSDC supported.
+- **Byte 1 Bit 6 (`0x20`)**: Offline PIN supported.
+- **Byte 1 Bit 5 (`0x10`)**: Signature supported.
+- **Byte 2 Bit 8 (`0x80`)**: Online cryptogram (ARQC) required.
+
+---
+
+### 9.2 Mastercard (M/Chip & PayPass)
+
+![Mastercard Logo](https://img.shields.io/badge/Mastercard-M%2FChip%20%2F%20PayPass-EB001B?style=for-the-badge&logo=mastercard&logoColor=white)
+
+Mastercard's chip application is **M/Chip Advance**, and its contactless surface is **Mastercard PayPass** (M/Chip Contactless).
+
+#### Key Mastercard Application Identifiers (AIDs):
+- **Mastercard Credit / Debit**: `A0000000041010`
+- **Maestro Debit (Global)**: `A0000000043060`
+- **Maestro UK / Cirrus**: `A0000000046000`
+
+#### Issuer Application Data (IAD - Tag 9F10) & CVR Structure:
+Mastercard encodes a 6-byte **Card Verification Results (CVR)** structure inside Tag `9F10`:
+```
+Byte 1: Header / Key Index
+Byte 2: CVR Byte 1 - Offline Verification Results (PIN tries, AC returned)
+Byte 3: CVR Byte 2 - Offline Data Authentication & Risk Management Results
+Byte 4: CVR Byte 3 - Consecutive Offline Transaction Counters
+Byte 5: CVR Byte 4 - Issuer Script Execution Status
+```
+
+---
+
+### 9.3 Troy (Turkey Domestic Scheme)
+
+![Troy Logo](https://img.shields.io/badge/Troy-Domestic%20Scheme%20Turkey-E30613?style=for-the-badge)
+
+**Troy** (Türkiye'nin Ödeme Yöntemi) is Turkey's national card payment scheme managed by BKM (Bankalararası Kart Merkezi).
+
+#### Key Troy Application Identifier (AID):
+- **Troy Credit / Debit / Prepaid**: `A0000000651010`
+
+#### Troy ISO 8583 BKM Integration Notes:
+- **Field 22 (POS Entry Mode)**: `051` for Troy Chip, `071` for Troy Contactless.
+- **Field 48 (Private Data)**: Contains Turkish instalment campaign data (`TAKSIT_SAYISI`), loyalty bonus points (`KAZANILAN_PUAN`), and campaign codes.
+- **Field 62 (Private Reserved)**: Contains BKM unique transaction reference and authorization sequence numbers.
+
+---
+
+### 9.4 American Express (AEIPS & ExpressPay)
+
+![American Express Logo](https://img.shields.io/badge/Amex-AEIPS%20%2F%20ExpressPay-006FCF?style=for-the-badge&logo=american-express&logoColor=white)
+
+American Express uses **AEIPS** (American Express International Processing Specification) for chip and **ExpressPay** for contactless.
+
+
+#### Key Amex Application Identifier (AID):
+- **American Express Credit**: `A0000000250000`
+
+#### Amex Structural Features:
+- **15-Digit PAN**: Amex PANs begin with `34` or `37` and are 15 digits long.
+- **4-Digit Front CID**: Card Identification Code is 4 digits printed on the front above the PAN.
+
+---
+
+### 9.5 Discover & JCB Specifications
+
+![Discover Logo](https://img.shields.io/badge/Discover-D--PAS-FF6000?style=for-the-badge&logo=discover&logoColor=white)
+![JCB Logo](https://img.shields.io/badge/JCB-J%2FSmart-003D7A?style=for-the-badge&logo=jcb&logoColor=white)
+
+- **Discover / Diners Club (D-PAS)**: AID `A0000001523010`. D-PAS (Discover Payment Application Specification) is fully EMV compliant.
+- **JCB (J/Smart & J/Speedy)**: AID `A0000000651010` / `A0000003330101`. Japan's domestic and international payment scheme.
+
+---
+
+## 10. EMV Action Codes & Terminal Decision Logic (IAC / TAC)
+
+During Step 7 (Terminal Action Analysis), the terminal evaluates whether to send the transaction online (ARQC), approve offline (TC), or decline offline (AAC). This decision uses three sets of bitmasks:
+
+1. **Issuer Action Codes (IAC)**: Downloaded from the card čip (Tags `9F0D`, `9F0E`, `9F0F`).
+2. **Terminal Action Codes (TAC)**: Configured in POS terminal terminal memory (`TAC Default`, `TAC Online`, `TAC Denial`).
+3. **Terminal Verification Results (TVR)**: Tag `95` maintained during transaction.
+
+```
+                    +-----------------------------+
+                    |  Terminal Verification      |
+                    |     Results (TVR - 95)      |
+                    +-----------------------------+
+                                   |
+            +----------------------+----------------------+
+            |                      |                      |
+            v                      v                      v
+     +--------------+       +--------------+       +--------------+
+     |  IAC Denial  |       |  IAC Online  |       | IAC Default  |
+     |  TAC Denial  |       |  TAC Online  |       | TAC Default  |
+     +--------------+       +--------------+       +--------------+
+            |                      |                      |
+     (Bitwise AND)          (Bitwise AND)          (Bitwise AND)
+            |                      |                      |
+            v                      v                      v
+      Match Found?           Match Found?           Host Online
+           YES                    YES                Unavailable?
+            |                      |                      |
+            v                      v                      v
+      DECLINE (AAC)          ONLINE (ARQC)          DECLINE (AAC)
+```
+
+---
+
+## 11. Card Security Codes & Cryptography (CVV, CVC, iCVV, dCVV)
+
+Modern payment cards use multiple variants of Card Verification Values (CVV / CVC) generated using 3DES cryptography to validate card authenticity across different acceptance channels:
+
+```
++-----------+--------------------------------------+-----------------------------------------------+
+| Code Type | Channel / Surface                    | Cryptographic Source & Protection             |
++-----------+--------------------------------------+-----------------------------------------------+
+| CVV1/CVC1 | Magnetic Stripe Track 1 & Track 2    | 3DES(PAN + Expiry + Service Code)             |
+| CVV2/CVC2 | Printed on Back / Front (CNP / Web) | 3DES(PAN + Expiry + CVK) - Never stored in DB |
+| iCVV      | Encoded inside EMV Chip Tag 57       | Prevents converting Chip data to Magstripe    |
+| dCVV      | Contactless NFC Transactions         | 3DES(PAN + Expiry + ATC) - Dynamic Per-Tap    |
++-----------+--------------------------------------+-----------------------------------------------+
+```
+
+---
+
+## 12. Magnetic Stripe Tracks Specification (Track 1, Track 2, Track 3)
+
+Payment card magnetic stripes contain up to three magnetic tracks formatted according to **ISO/IEC 7813**:
+
+```
+TRACK 1 (IATA Format - 79 Max ASCII Characters, 7-bit Encoding):
+% B 5412751234567890 ^ DOE/JOHN ^ 2812 201 00000000000000000000 ?
+| | |                  |         |    |   |                    |
+| | +-- PAN (16)       +-- Name  |    |   +-- Discretionary    +-- End Sentinel
+| +-- Format 'B'                 |    +-- Service Code (201)
++-- Start Sentinel (%)           +-- Expiration Date (YYMM = 2812)
+
+TRACK 2 (ABA Format - 40 Max BCD Digits, 5-bit Encoding):
+; 5412751234567890 = 2812 201 00000000000 ?
+| |                  |    |   |           |
+| +-- PAN (16)       |    |   +-- Discret +-- End Sentinel (?)
++-- Start Sentinel   |    +-- Service Code (201)
+    (;)              +-- Field Separator (= or D)
+```
+
+---
+
+## 13. ISO 8583 Dialects & Payment Network Variants
+
+While ISO 8583 provides the global framework, individual payment networks implement proprietary network dialects:
+
+- **Visa BASE I / SMS**: Uses 2-byte Binary Length Headers before messages, Field 48 Subfield TLV structures, and Field 62 for Transaction Identifiers.
+- **Mastercard CIS / IPM**: Used in clearing and settlement batch files. Uses proprietary DE 48 Data Element subfields (e.g. DE 48 Subelement 22 for Merchant Advice Codes).
+- **AS 2805**: The Australian national standard variant based on ISO 8583-1:1987 using BCD length headers and EBCDIC character encoding.
+- **ISO 8583-2:1993**: Updated standard using 3-digit Action Codes (e.g. `100` Approved instead of `00`).
+
+---
+
+## 14. EMV APDU Command & Response State Machine Diagram
+
+```
+  +-----------------------------------------------------------------+
+  |                    POWER ON / SMART CARD RESET                  |
+  +-----------------------------------------------------------------+
+                                   |
+                                   v
+  +-----------------------------------------------------------------+  C-APDU: 00 A4 04 00 0E [12PAY.SYS.DDF01 / 2PAY.SYS.DDF01]
+  |                  1. APPLICATION SELECTION                       | ========================================================>
+  +-----------------------------------------------------------------+ <========================================================
+                                   |                                   R-APDU: 6F [FCI Template] + 9000
+                                   v
+  +-----------------------------------------------------------------+  C-APDU: 80 A8 00 00 [PDOL Data]
+  |             2. INITIATE APPLICATION PROCESSING (GPO)            | ========================================================>
+  +-----------------------------------------------------------------+ <========================================================
+                                   |                                   R-APDU: 77 [AIP (82) + AFL (94)] + 9000
+                                   v
+  +-----------------------------------------------------------------+  C-APDU: 00 B2 [Record] [SFI << 3 | 04] 00
+  |                  3. READ APPLICATION DATA                       | ========================================================>
+  +-----------------------------------------------------------------+ <========================================================
+                                   |                                   R-APDU: 70 [PAN, Expiry, Track 2] + 9000
+                                   v
+  +-----------------------------------------------------------------+  C-APDU: 00 20 00 80 [PIN Block]
+  |               4. CARDHOLDER VERIFICATION (VERIFY PIN)          | ========================================================>
+  +-----------------------------------------------------------------+ <========================================================
+                                   |                                   R-APDU: 9000 (Success) / 63C2 (PIN Incorrect)
+                                   v
+  +-----------------------------------------------------------------+  C-APDU: 80 AE [0x80/0x40/0x00] 00 [CDOL1 Data]
+  |                   5. FIRST GENERATE AC                          | ========================================================>
+  +-----------------------------------------------------------------+ <========================================================
+                                   |                                   R-APDU: 80 [CID (80) + ATC + ARQC (9F26)] + 9000
+                                   v
+  +-----------------------------------------------------------------+  C-APDU: 80 AE 40 00 [Tag 91 ARPC + Tag 8A ARC]
+  |                  6. SECOND GENERATE AC                          | ========================================================>
+  +-----------------------------------------------------------------+ <========================================================
+                                   |                                   R-APDU: 80 [CID (40) + ATC + TC] + 9000
+                                   v
+  +-----------------------------------------------------------------+
+  |                  TRANSACTION COMPLETED / APPROVED               |
+  +-----------------------------------------------------------------+
+```
+
+---
+
+## 15. Primary Bitmap 128-Bit Visual Bit Grid Matrix
+
+```
+BIT GRID MATRIX FOR ISO 8583 FIELDS 1 TO 64 (PRIMARY BITMAP)
+-------------------------------------------------------------------------------
+Byte Index | Bits 8..1  | Hex Value | Fields Represented
+-------------------------------------------------------------------------------
+  Byte 1   | [B1..B8]   |   0xF2    | Field 1(SecBitmap), Field 2(PAN), Field 3(ProcCode), Field 4(Amount)
+  Byte 2   | [B9..B16]  |   0x38    | Field 7(TransDateTime), Field 11(STAN), Field 12(Time)
+  Byte 3   | [B17..B24] |   0x84    | Field 13(Date), Field 18(MCC), Field 22(POS Mode), Field 23(PSN)
+  Byte 4   | [B25..B32] |   0x81    | Field 25(POS Cond), Field 32(AcqID)
+  Byte 5   | [B33..B40] |   0x08    | Field 35(Track 2 Data)
+  Byte 6   | [B41..B48] |   0xE0    | Field 37(RRN), Field 38(AuthCode), Field 39(RespCode), Field 41(TID)
+  Byte 7   | [B49..B56] |   0x00    | Field 42(MID), Field 43(Name), Field 48(Private Data)
+  Byte 8   | [B57..B64] |   0x00    | Field 52(PIN Block), Field 55(EMV TLV Payload)
+-------------------------------------------------------------------------------
+RESULTING PRIMARY BITMAP HEX: F238848108E00000
+```
+
+---
+
+## 16. Key Hierarchy & Derivation Architecture Diagram
+
+```
++-------------------------------------------------------------------------------+
+|                       ISSUER MASTER KEY (IMK)                                 |
+|                       128-bit / 192-bit 3DES Key                              |
++-------------------------------------------------------------------------------+
+                                        |
+                 +----------------------+----------------------+
+                 |  Derivation via PAN + PSN                   |
+                 v                                             v
++---------------------------------+           +---------------------------------+
+|     CARD MASTER KEY A (MKA)     |           |     CARD MASTER KEY B (MKB)     |
++---------------------------------+           +---------------------------------+
+                 |                                             |
+                 +----------------------+----------------------+
+                                        |
+                                        | Derivation via ATC (Tag 9F36)
+                                        v
+                       +---------------------------------+
+                       |   TRANSACTION SESSION KEY (SK)   |
+                       |  3DES_MK(ATC || 0x0000...F0)    |
+                       +---------------------------------+
+                                        |
+                                        | 3DES-CBC-MAC Signature
+                                        v
+                       +---------------------------------+
+                       | ARQC CRYPTOGRAM (Tag 9F26)      |
+                       +---------------------------------+
+```
+
+---
+
+## 17. Payment Terminal Hardware & Contactless NFC Layer Stack
+
+```
++-------------------------------------------------------------------------------+
+| LAYER 5: APPLICATION & SWITCH ENGINE (ISO 8583 Packer / Host Authorization)   |
++-------------------------------------------------------------------------------+
+                                        |
++-------------------------------------------------------------------------------+
+| LAYER 4: POS ACQUIRING KERNEL (Terminal Risk Mgmt, TVR 95, CVM Processing)   |
++-------------------------------------------------------------------------------+
+                                        |
++-------------------------------------------------------------------------------+
+| LAYER 3: EMV L2 KERNEL (VSDC, M/Chip, Troy, ExpressPay Contactless Engines)   |
++-------------------------------------------------------------------------------+
+                                        |
++-------------------------------------------------------------------------------+
+| LAYER 2: ISO/IEC 7816-4 / ISO 14443-4 APDU TRANSPORT LAYER (C-APDU / R-APDU)  |
++-------------------------------------------------------------------------------+
+                                        |
++-------------------------------------------------------------------------------+
+| LAYER 1: PHYSICAL NFC / CONTACT CARRIER (13.56 MHz RF Field / Smart Card Slot)|
++-------------------------------------------------------------------------------+
+```
+
+---
+
+## 18. Cardholder Verification Method (CVM) Decision Flowchart
+
+```
+                  +-----------------------------------+
+                  |   Read Card CVM List (Tag 8E)     |
+                  +-----------------------------------+
+                                    |
+                                    v
+                  +-----------------------------------+
+                  | Evaluate First CVM Rule Condition |
+                  +-----------------------------------+
+                                    |
+            +-----------------------+-----------------------+
+            | Condition Met?                                | Condition Not Met?
+            v                                               v
+  +------------------+                            +-------------------+
+  | Check Terminal   |                            | Try Next CVM Rule |
+  | Capability       |                            +-------------------+
+  +------------------+                                      |
+            |                                               v
+    +-------+-------+                             +-------------------+
+    | Supported?    | Not Supported?              | Fail / Pass TVR   |
+    v               v                             +-------------------+
++-------+   +---------------+
+|Perform|   | Fail / Try    |
+| CVM   |   | Next Rule     |
++-------+   +---------------+
+```
 
 ---
 
