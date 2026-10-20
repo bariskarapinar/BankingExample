@@ -1,0 +1,136 @@
+package com.myapp.bankingexample.simulator;
+
+import com.myapp.bankingexample.emv.EmvTransactionEngine;
+import com.myapp.bankingexample.emv.TlvElement;
+import com.myapp.bankingexample.emv.TlvParser;
+import com.myapp.bankingexample.iso8583.IsoFieldValue;
+import com.myapp.bankingexample.iso8583.IsoMessage;
+import com.myapp.bankingexample.iso8583.IsoMessagePacker;
+import com.myapp.bankingexample.iso8583.IsoMessageUnpacker;
+import com.myapp.bankingexample.iso8583.IsoMtiDecoder;
+import com.myapp.bankingexample.iso8583.IsoSampleMessages;
+import com.myapp.bankingexample.utils.HexUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+public class EndToEndPaymentSimulator {
+
+    public static class SimulationLogResult {
+        public String statusSummary;
+        public String requestIsoHex;
+        public String responseIsoHex;
+        public List<String> logs = new ArrayList<>();
+    }
+
+    public static SimulationLogResult runFullPaymentFlow(String cardScheme, long amountCents, String entryMode) {
+        SimulationLogResult result = new SimulationLogResult();
+        List<String> log = result.logs;
+
+        log.add("=========================================================================");
+        log.add(" UÇTAN UCA İNTERAKTİF ÖDEME SİMÜLASYONU (POS <-> EMV <-> ISO 8583 <-> HOST)");
+        log.add("=========================================================================");
+
+        // Step 1: Execute EMV Card Terminal Flow
+        EmvTransactionEngine.TransactionResult emvResult = EmvTransactionEngine.runSimulatedEmvTransaction(cardScheme, amountCents, entryMode);
+        log.addAll(emvResult.logs);
+
+        log.add("\n-------------------------------------------------------------------------");
+        log.add(" [AŞAMA 2] POS TERMINAL / ACQUIRER: ISO 8583 MESAJ OLUŞTURMA (0200)");
+        log.add("-------------------------------------------------------------------------");
+
+        IsoMessage req0200 = IsoSampleMessages.create0200FinancialRequest(emvResult.field55Hex);
+        req0200.setField(2, emvResult.pan);
+        req0200.setField(4, String.format(Locale.US, "%012d", amountCents));
+
+        if ("071".equals(entryMode)) {
+            req0200.setField(22, "071"); // Contactless EMV
+        } else {
+            req0200.setField(22, "051"); // Chip EMV
+        }
+
+        byte[] reqBytes = IsoMessagePacker.pack(req0200);
+        result.requestIsoHex = HexUtils.bytesToHex(reqBytes);
+
+        IsoMtiDecoder.MtiInfo reqMtiInfo = IsoMtiDecoder.decode(req0200.getMti());
+        log.add("MTI: " + reqMtiInfo.getFullDescriptionTr());
+        log.add("Primary Bitmap Hex: " + req0200.getBitmap().toHex());
+        log.add("Primary Bitmap Binary:\n  " + req0200.getBitmap().toBinaryString());
+
+        log.add("\nISO 8583 0200 Finansal İstek Sahaları:");
+        for (Map.Entry<Integer, IsoFieldValue> entry : req0200.getFields().entrySet()) {
+            int fieldNum = entry.getKey();
+            IsoFieldValue fVal = entry.getValue();
+            if (fieldNum == 55) {
+                log.add(String.format(Locale.US, "  - Field %d [%s]: (EMV TLV Data - %d Bayt)", fieldNum, fVal.getSpec().getName(), fVal.getValue().length() / 2));
+            } else {
+                log.add(String.format(Locale.US, "  - Field %d [%s]: %s", fieldNum, fVal.getSpec().getName(), fVal.getValue()));
+            }
+        }
+
+        log.add("\n-> Gönderilen Ham ISO 8583 Paket Hex Dökümü:\n" + result.requestIsoHex);
+
+        // Step 2: Host Processing Simulation
+        log.add("\n-------------------------------------------------------------------------");
+        log.add(" [AŞAMA 3] BANKA PROSESÖRÜ / HOST SİMÜLATÖRÜ PROCESSING");
+        log.add("-------------------------------------------------------------------------");
+
+        IsoMessage unpackedReq = IsoMessageUnpacker.unpack(reqBytes);
+        log.add("Host Gelen ISO 8583 Paketini Ayrıştırdı (Unpacked OK).");
+        log.add("Host Kart Numarasını Doğruladı: " + unpackedReq.getFieldValue(2));
+        log.add("Host Tutar Kontrolü: " + (Long.parseLong(unpackedReq.getFieldValue(4)) / 100.0) + " TL");
+
+        String reqField55 = unpackedReq.getFieldValue(55);
+        if (reqField55 != null && !reqField55.isEmpty()) {
+            log.add("\nHost Field 55 Çip Verisini (BER-TLV) Çözümlüyor:");
+            List<TlvElement> tlvList = TlvParser.parseHex(reqField55);
+            for (TlvElement tlv : tlvList) {
+                log.add(String.format(Locale.US, "  * Tag %s (%s): %s", tlv.getTagHex(), tlv.getEmvTag().getName(), tlv.getValueHex()));
+            }
+        }
+
+        log.add("\nHost ARQC Kriptogram İmzasını Doğruladı: BAŞARILI (ARQC OK)");
+        log.add("Host Bakiye ve Limit Kontrolü: YETERLİ BAKİYE");
+        log.add("Host Otorizasyon Kodu Üretti: 681042 | Yanıt Kodu: 00 (Onaylandı)");
+
+        // Step 3: Host 0210 Response Creation
+        String arpcHex = "3A4B5C6D7E8F9000"; // Simulated ARPC generated by Issuer Host
+        String respField55 = "910A" + arpcHex + "30308A023030"; // Tag 91 Issuer Auth Data + Tag 8A ARC '00'
+
+        IsoMessage resp0210 = IsoSampleMessages.create0210FinancialResponse("681042", "00", respField55);
+        resp0210.setField(2, emvResult.pan);
+        resp0210.setField(4, String.format(Locale.US, "%012d", amountCents));
+        resp0210.setField(11, req0200.getFieldValue(11)); // Matching STAN
+
+        byte[] respBytes = IsoMessagePacker.pack(resp0210);
+        result.responseIsoHex = HexUtils.bytesToHex(respBytes);
+
+        log.add("\n-------------------------------------------------------------------------");
+        log.add(" [AŞAMA 4] HOST -> POS TERMINAL: ISO 8583 YANIT MESAJI (0210)");
+        log.add("-------------------------------------------------------------------------");
+        log.add("<- Gelen ISO 8583 0210 Yanıt Mesajı Hex Dökümü:\n" + result.responseIsoHex);
+
+        log.add("\nISO 8583 0210 Yanıt Sahaları:");
+        log.add("  - Field 38 [Auth Code]: 681042");
+        log.add("  - Field 39 [Response Code]: 00 (ONAYLANDI / APPROVED)");
+        log.add("  - Field 55 [Host EMV Response TLV]: Tag 91 ARPC (" + arpcHex + ") + Tag 8A ARC (00)");
+
+        // Step 4: Terminal Second Generate AC
+        log.add("\n-------------------------------------------------------------------------");
+        log.add(" [AŞAMA 5] POS TERMINAL & EMV KART SECOND GENERATE AC (2. AKIŞ)");
+        log.add("-------------------------------------------------------------------------");
+        log.add("POS Terminali Host'tan gelen Tag 91 (ARPC) ve Tag 8A (00) değerlerini Çip Karta iletir:");
+        log.add("-> APDU TX: 80AE4000 0A" + arpcHex + "3030 (2nd GENERATE AC - TC İsteği)");
+        log.add("<- APDU RX: 80024000 (CID: 40 - TC Transaction Certificate Onaylandı!)");
+        log.add("-> Kart Çipi İhraççı Doğrulamasını Onayladı ve İşlemi Kalıcı Olarak Karta Kaydetti.");
+
+        log.add("\n=========================================================================");
+        log.add(" İŞLEM BAŞARIYLA TAMAMLAMDI: ONAYLANDI (AUTH CODE: 681042)");
+        log.add("=========================================================================");
+
+        result.statusSummary = "İŞLEM ONAYLANDI (AUTH CODE: 681042 | ARC: 00)";
+        return result;
+    }
+}
