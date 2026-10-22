@@ -19,6 +19,14 @@ public class MainActivity extends AppCompatActivity {
             "Bilgi Bankası"
     };
 
+    private final int[] TAB_ICONS = new int[]{
+            R.drawable.ic_emv_chip,
+            R.drawable.ic_apdu_terminal,
+            R.drawable.ic_iso_network,
+            R.drawable.ic_gateway_sim,
+            R.drawable.ic_knowledge_book
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
             if (position < TAB_TITLES.length) {
                 tab.setText(TAB_TITLES[position]);
+                tab.setIcon(TAB_ICONS[position]);
             }
         }).attach();
     }
