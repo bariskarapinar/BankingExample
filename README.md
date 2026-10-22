@@ -67,6 +67,9 @@ An ultra-comprehensive, production-grade, pure Java Android reference applicatio
 
 ## 1. Project Overview & Executive Summary
 
+> [!NOTE]
+> This application is built with pure Java 11+ and native Android Material UI components to serve as an interactive, zero-dependency educational laboratory for payment system engineers and financial software architects.
+
 This application is designed as an all-in-one educational textbook, protocol analyzer, message packer/unpacker, APDU inspector, and interactive payment gateway simulator for banking software engineers, POS terminal developers, payment system architects, and cybersecurity researchers.
 
 ### Key Capabilities & Built-in Tools:
@@ -84,7 +87,8 @@ This application is designed as an all-in-one educational textbook, protocol ana
 
 **EMV** stands for **Eurocard, Mastercard, and Visa**, the three payment organizations that initially created the global standard for smart card payment transactions. Managed today by EMVCo (owned by Visa, Mastercard, JCB, American Express, China UnionPay, and Discover), the specification defines the interaction between IC (Integrated Circuit) smart card payment applications and terminal devices (POS, ATM, mPOS).
 
-Unlike legacy magnetic stripe cards that store static, easily cloned cardholder data (Track 1 / Track 2), EMV smart cards contain a secure tamper-resistant microcontroller capable of executing cryptographic algorithms (DES/3DES/AES, RSA, ECC). During every EMV transaction, the card generates a unique, one-time cryptographic signature called an **Application Cryptogram (AC)**, preventing replay attacks and card cloning.
+> [!IMPORTANT]
+> Unlike legacy magnetic stripe cards that store static, easily cloned cardholder data (Track 1 / Track 2), EMV smart cards contain a secure tamper-resistant microcontroller capable of executing cryptographic algorithms (DES/3DES/AES, RSA, ECC). During every EMV transaction, the card generates a unique, one-time cryptographic signature called an **Application Cryptogram (AC)**, preventing replay attacks and card cloning.
 
 ---
 
@@ -544,7 +548,8 @@ X 0000312345678901  (PAN Field)
 
 ## 4. EMV & ISO 8583 Integration: Field 55 (ICC System Related Data)
 
-**Field 55** is the vital bridge connecting the smart card realm with the financial ISO 8583 network. It stores concatenated BER-TLV tags exchanged between card and host.
+> [!TIP]
+> **Field 55** is the vital bridge connecting the smart card realm with the financial ISO 8583 network. It stores concatenated BER-TLV tags exchanged between card and host, enabling online host systems to validate chip signatures (ARQC) without altering standard ISO 8583 message structures.
 
 ### 4.1 Field 55 Request TLV Container
 Sent in ISO 8583 `0200` Financial Request:
