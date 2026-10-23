@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="4dp"
+    app:cardElevation="3dp"
+    app:strokeColor="#CBD5E1"
+    app:strokeWidth="1dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="12dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFB"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="*** MÜŞTERİ NÜSHASI ***"
+            android:gravity="center"
+            android:textColor="#0F172A"
+            android:textSize="12sp"
+            android:fontFamily="monospace"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="RESTORAN ANKARA TR"
+            android:gravity="center"
+            android:textColor="#0F172A"
+            android:textSize="14sp"
+            android:fontFamily="monospace"
+            android:textStyle="bold"
+            android:layout_marginTop="2dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ANKARA / TURKIYE"
+            android:gravity="center"
+            android:textColor="#64748B"
+            android:textSize="10sp"
+            android:fontFamily="monospace" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="------------------------------------------------"
+            android:textColor="#94A3B8"
+            android:fontFamily="monospace"
+            android:textSize="10sp"
+            android:layout_marginTop="6dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="TID: POS85831"
+                android:textColor="#334155"
+                android:textSize="11sp"
+                android:fontFamily="monospace" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MID: MCH858300000001"
+                android:textColor="#334155"
+                android:textSize="11sp"
+                android:fontFamily="monospace" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvReceiptDateTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TARIH/SAAT: 26/09/2026 14:20:10"
+            android:textColor="#334155"
+            android:textSize="11sp"
+            android:fontFamily="monospace" />
+
+        <TextView
+            android:id="@+id/tvReceiptPan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="KART NO: 4543 **** **** 9012 (C)"
+            android:textColor="#0F172A"
+            android:textSize="12sp"
+            android:fontFamily="monospace"
+            android:textStyle="bold"
+            android:layout_marginTop="4dp" />
+
+        <TextView
+            android:id="@+id/tvReceiptAid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="AID: A0000000031010 (VISA CREDIT)"
+            android:textColor="#475569"
+            android:textSize="10sp"
+            android:fontFamily="monospace" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="------------------------------------------------"
+            android:textColor="#94A3B8"
+            android:fontFamily="monospace"
+            android:textSize="10sp"
+            android:layout_marginTop="6dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="ISLEM TUTARI:"
+                android:textColor="#0F172A"
+                android:textSize="14sp"
+                android:fontFamily="monospace"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvReceiptAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="250.00 TL"
+                android:textColor="#0F172A"
+                android:textSize="16sp"
+                android:fontFamily="monospace"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvReceiptAuthCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ONAY KODU (AUTH CODE): 681042"
+            android:textColor="#16A34A"
+            android:textSize="12sp"
+            android:fontFamily="monospace"
+            android:textStyle="bold"
+            android:layout_marginTop="6dp" />
+
+        <TextView
+            android:id="@+id/tvReceiptArc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="YANIT KODU (ARC): 00 (ISLEM BASARILI)"
+            android:textColor="#16A34A"
+            android:textSize="11sp"
+            android:fontFamily="monospace" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="================================================"
+            android:textColor="#94A3B8"
+            android:fontFamily="monospace"
+            android:textSize="10sp"
+            android:layout_marginTop="6dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TEŞEKKÜR EDERİZ / THANK YOU"
+            android:gravity="center"
+            android:textColor="#64748B"
+            android:textSize="11sp"
+            android:fontFamily="monospace"
+            android:layout_marginTop="4dp" />
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
