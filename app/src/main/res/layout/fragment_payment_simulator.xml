@@ -1,100 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="12dp">
+    android:padding="12dp"
+    android:background="@color/background_light">
 
-    <com.google.android.material.card.MaterialCardView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="2dp"
-        android:layout_marginBottom="12dp">
+        android:orientation="vertical">
 
-        <LinearLayout
+        <!-- Embedded Interactive Credit Card -->
+        <include
+            android:id="@+id/cardVisualizer"
+            layout="@layout/view_emv_credit_card" />
+
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="12dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Uçtan Uca Ödeme Akışı Simülasyonu"
-                android:textColor="@color/primary"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="POS terminali, Çip kart (EMV) ve Banka Host simülatörü arasında canlı ödeme akışını başlatın:"
-                android:textColor="@color/text_secondary"
-                android:textSize="12sp"
-                android:layout_marginBottom="8dp" />
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp"
+            android:layout_marginBottom="12dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:padding="12dp">
 
-                <Spinner
-                    android:id="@+id/spCardScheme"
-                    android:layout_width="0dp"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+                    android:text="Uçtan Uca Ödeme Akışı Simülasyonu"
+                    android:textColor="@color/primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
-                <Spinner
-                    android:id="@+id/spEntryMode"
-                    android:layout_width="0dp"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="8dp" />
-            </LinearLayout>
+                    android:text="POS terminali, Çip kart (EMV) ve Banka Host simülatörü arasında canlı ödeme akışını başlatın:"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp"
+                    android:layout_marginBottom="8dp" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etAmount"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="İşlem Tutarı (TL)"
-                    android:inputType="numberDecimal"
-                    android:text="250.00" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:orientation="horizontal">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnStartSimulation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Canlı Ödeme Akışını Başlat"
-                app:backgroundTint="@color/accent" />
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+                    <Spinner
+                        android:id="@+id/spCardScheme"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
 
-    <TextView
-        android:id="@+id/tvSimStatus"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/code_background"
-        android:textColor="@color/code_text"
-        android:fontFamily="monospace"
-        android:textSize="12sp"
-        android:padding="8dp"
-        android:text="Simülasyon başlatılmaya hazır..."
-        android:layout_marginBottom="8dp" />
+                    <Spinner
+                        android:id="@+id/spEntryMode"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp" />
+                </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvSimLogs"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-</LinearLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etAmount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="İşlem Tutarı (TL)"
+                        android:inputType="numberDecimal"
+                        android:text="250.00" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnStartSimulation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Canlı Ödeme Akışını Başlat"
+                    app:backgroundTint="@color/accent" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Thermal Receipt Visualizer (Shown after approval) -->
+        <include
+            android:id="@+id/receiptVisualizer"
+            layout="@layout/view_pos_receipt"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tvSimStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/code_background"
+            android:textColor="@color/code_text"
+            android:fontFamily="monospace"
+            android:textSize="12sp"
+            android:padding="8dp"
+            android:text="Simülasyon başlatılmaya hazır..."
+            android:layout_marginBottom="8dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvSimLogs"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:scrollbars="vertical" />
+
+    </LinearLayout>
+</ScrollView>
