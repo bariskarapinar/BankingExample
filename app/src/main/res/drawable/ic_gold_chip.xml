@@ -1,0 +1,15 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="36dp"
+    android:height="28dp"
+    android:viewportWidth="36"
+    android:viewportHeight="28">
+    <!-- Gold Metallic Base -->
+    <path
+        android:fillColor="#EAB308"
+        android:pathData="M3,0 h30 a3,3 0 0,1 3,3 v22 a3,3 0 0,1 -3,3 h-30 a3,3 0 0,1 -3,-3 v-22 a3,3 0 0,1 3,-3 Z" />
+    <!-- Metallic Contact Lines -->
+    <path
+        android:strokeColor="#CA8A04"
+        android:strokeWidth="1"
+        android:pathData="M12,0 v28 M24,0 v28 M0,9 h36 M0,19 h36" />
+</vector>
