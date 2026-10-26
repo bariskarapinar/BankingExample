@@ -95,7 +95,17 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textSize="11sp"
                     android:text="PIN Block Hesapla" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnTvrEditorTool"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="11sp"
+                    android:text="TVR (Tag 95) Analiz" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnArqcCalcTool"
@@ -103,7 +113,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="ARQC Kripto Demo" />
+                    android:textSize="11sp"
+                    android:text="ARQC Demosu" />
             </LinearLayout>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
