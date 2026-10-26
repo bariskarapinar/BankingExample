@@ -1,5 +1,8 @@
 package com.myapp.bankingexample.ui;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +23,7 @@ import com.myapp.bankingexample.R;
 import com.myapp.bankingexample.emv.EmvCryptoUtils;
 import com.myapp.bankingexample.emv.TlvElement;
 import com.myapp.bankingexample.emv.TlvParser;
+import com.myapp.bankingexample.utils.HexUtils;
 import com.myapp.bankingexample.utils.PinBlockCalculator;
 
 import java.util.List;
@@ -52,6 +57,7 @@ public class EmvTlvFragment extends Fragment {
         Button btnSampleFci = view.findViewById(R.id.btnSampleFci);
         Button btnSampleF55 = view.findViewById(R.id.btnSampleF55);
         Button btnPinBlockTool = view.findViewById(R.id.btnPinBlockTool);
+        Button btnTvrEditorTool = view.findViewById(R.id.btnTvrEditorTool);
         Button btnArqcCalcTool = view.findViewById(R.id.btnArqcCalcTool);
 
         // Sample FCI Hex
@@ -73,6 +79,9 @@ public class EmvTlvFragment extends Fragment {
         });
 
         btnPinBlockTool.setOnClickListener(v -> showPinBlockDialog());
+        if (btnTvrEditorTool != null) {
+            btnTvrEditorTool.setOnClickListener(v -> showTvrDialog());
+        }
         btnArqcCalcTool.setOnClickListener(v -> showArqcCalcDialog());
     }
 
@@ -89,7 +98,20 @@ public class EmvTlvFragment extends Fragment {
         new AlertDialog.Builder(getContext())
                 .setTitle("ISO 9564-1 PIN Block Hesaplayıcı")
                 .setMessage(res.explanation)
-                .setPositiveButton("Kapat", null)
+                .setPositiveButton("Kopyala", (dialog, which) -> copyToClipboard(res.pinBlockHex))
+                .setNegativeButton("Kapat", null)
+                .show();
+    }
+
+    private void showTvrDialog() {
+        if (getContext() == null) return;
+        byte[] sampleTvr = HexUtils.hexToBytes("0000008000");
+        String explanation = TlvParser.explainTVR(sampleTvr);
+        new AlertDialog.Builder(getContext())
+                .setTitle("TVR (Tag 95 - 5 Bayt / 40 Bit) Analizi")
+                .setMessage(explanation)
+                .setPositiveButton("Kopyala", (dialog, which) -> copyToClipboard("0000008000"))
+                .setNegativeButton("Kapat", null)
                 .show();
     }
 
@@ -107,7 +129,18 @@ public class EmvTlvFragment extends Fragment {
         new AlertDialog.Builder(getContext())
                 .setTitle("EMV ARQC Kriptogram Demosu")
                 .setMessage(res.explanation)
-                .setPositiveButton("Kapat", null)
+                .setPositiveButton("Kopyala", (dialog, which) -> copyToClipboard(res.simulatedArqcHex))
+                .setNegativeButton("Kapat", null)
                 .show();
+    }
+
+    private void copyToClipboard(String text) {
+        if (getContext() == null) return;
+        ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+        if (clipboard != null) {
+            ClipData clip = ClipData.newPlainText("EMV Data", text);
+            clipboard.setPrimaryClip(clip);
+            Toast.makeText(getContext(), "Pano'ya Kopyalandı: " + text, Toast.LENGTH_SHORT).show();
+        }
     }
 }
