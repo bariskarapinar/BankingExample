@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +20,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.myapp.bankingexample.R;
+import com.myapp.bankingexample.emv.TlvElement;
+import com.myapp.bankingexample.emv.TlvParser;
 import com.myapp.bankingexample.iso8583.IsoFieldDictionary;
 import com.myapp.bankingexample.iso8583.IsoFieldSpec;
 import com.myapp.bankingexample.iso8583.IsoFieldValue;
@@ -53,6 +56,7 @@ public class Iso8583Fragment extends Fragment {
         tvIsoHeaderSummary = view.findViewById(R.id.tvIsoHeaderSummary);
         Button btnUnpackIso = view.findViewById(R.id.btnUnpackIso);
         Button btnMtiInfo = view.findViewById(R.id.btnMtiInfo);
+        Button btnAnalyzeField55 = view.findViewById(R.id.btnAnalyzeField55);
         RecyclerView rvIsoFields = view.findViewById(R.id.rvIsoFields);
 
         adapter = new IsoFieldAdapter();
@@ -86,6 +90,9 @@ public class Iso8583Fragment extends Fragment {
 
         btnUnpackIso.setOnClickListener(v -> unpackAndDisplay());
         btnMtiInfo.setOnClickListener(v -> displayMtiAndBitmapMatrix());
+        if (btnAnalyzeField55 != null) {
+            btnAnalyzeField55.setOnClickListener(v -> analyzeField55());
+        }
 
         // Default 0200
         applyPreset(0);
@@ -126,6 +133,37 @@ public class Iso8583Fragment extends Fragment {
 
         List<IsoFieldValue> list = new ArrayList<>(msg.getFields().values());
         adapter.setFields(list);
+    }
+
+    private void analyzeField55() {
+        if (getContext() == null) return;
+        String hex = etIsoHex.getText().toString().trim();
+        IsoMessage msg = IsoMessageUnpacker.unpackHex(hex);
+        String field55Hex = msg.getFieldValue(55);
+
+        if (field55Hex == null || field55Hex.isEmpty()) {
+            Toast.makeText(getContext(), "Bu ISO mesajında Saha 55 (EMV TLV) bulunamadı.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        List<TlvElement> tlvList = TlvParser.parseHex(field55Hex);
+        StringBuilder sb = new StringBuilder();
+        sb.append("=== SAHA 55 EMV BER-TLV DÖKÜMÜ ===\n\n");
+        for (TlvElement tlv : tlvList) {
+            sb.append("Tag ").append(tlv.getTagHex()).append(" [").append(tlv.getEmvTag().getName()).append("]\n");
+            sb.append("  Uzunluk: ").append(tlv.getLength()).append(" Bayt\n");
+            sb.append("  Değer Hex: ").append(tlv.getValueHex()).append("\n");
+            if (tlv.getExplanation() != null && !tlv.getExplanation().isEmpty()) {
+                sb.append("  Açıklama: ").append(tlv.getExplanation().replace("\n", "\n  ")).append("\n");
+            }
+            sb.append("\n");
+        }
+
+        new AlertDialog.Builder(getContext())
+                .setTitle("Saha 55 (Field 55 - ICC Data) Çip Analizi")
+                .setMessage(sb.toString())
+                .setPositiveButton("Kapat", null)
+                .show();
     }
 
     private void displayMtiAndBitmapMatrix() {
