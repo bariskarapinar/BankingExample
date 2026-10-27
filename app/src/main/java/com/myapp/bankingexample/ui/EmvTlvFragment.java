@@ -4,6 +4,8 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +23,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.myapp.bankingexample.R;
 import com.myapp.bankingexample.emv.EmvCryptoUtils;
+import com.myapp.bankingexample.emv.EmvTag;
+import com.myapp.bankingexample.emv.EmvTagDictionary;
 import com.myapp.bankingexample.emv.TlvElement;
 import com.myapp.bankingexample.emv.TlvParser;
 import com.myapp.bankingexample.utils.HexUtils;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
@@ -53,6 +58,7 @@ public class EmvTlvFragment extends Fragment {
         rvTlvTree.setAdapter(adapter);
 
         Button btnParseTlv = view.findViewById(R.id.btnParseTlv);
+        Button btnTagLookupTool = view.findViewById(R.id.btnTagLookupTool);
         Button btnSampleFci = view.findViewById(R.id.btnSampleFci);
         Button btnSampleF55 = view.findViewById(R.id.btnSampleF55);
         Button btnPinBlockTool = view.findViewById(R.id.btnPinBlockTool);
@@ -68,6 +74,9 @@ public class EmvTlvFragment extends Fragment {
         parseAndDisplay();
 
         btnParseTlv.setOnClickListener(v -> parseAndDisplay());
+        if (btnTagLookupTool != null) {
+            btnTagLookupTool.setOnClickListener(v -> showTagLookupDialog());
+        }
         btnSampleFci.setOnClickListener(v -> {
             etTlvInput.setText(sampleFci);
             parseAndDisplay();
@@ -89,6 +98,60 @@ public class EmvTlvFragment extends Fragment {
         List<TlvElement> elements = TlvParser.parseHex(inputHex);
         adapter.setElements(elements);
         tvParsedCount.setText(String.format(Locale.US, "Ayrıştırılan Tag Sayısı: %d", elements.size()));
+    }
+
+    private void showTagLookupDialog() {
+        if (getContext() == null) return;
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_tag_lookup, null);
+        EditText etTagSearch = dialogView.findViewById(R.id.etTagSearch);
+        TextView tvTagLookupResults = dialogView.findViewById(R.id.tvTagLookupResults);
+
+        Collection<EmvTag> allTags = EmvTagDictionary.getAllTags();
+        updateTagLookupResults("", allTags, tvTagLookupResults);
+
+        etTagSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                updateTagLookupResults(s.toString(), allTags, tvTagLookupResults);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        new AlertDialog.Builder(getContext())
+                .setTitle("Arama Motorlu EMV Tag Sözlüğü")
+                .setView(dialogView)
+                .setPositiveButton("Kapat", null)
+                .show();
+    }
+
+    private void updateTagLookupResults(String query, Collection<EmvTag> allTags, TextView tvResults) {
+        String cleanQuery = query.toLowerCase(Locale.US).trim();
+        StringBuilder sb = new StringBuilder();
+        int count = 0;
+
+        for (EmvTag tag : allTags) {
+            boolean matchHex = tag.getHex().toLowerCase(Locale.US).contains(cleanQuery);
+            boolean matchName = tag.getName().toLowerCase(Locale.US).contains(cleanQuery);
+            boolean matchDesc = tag.getDescriptionTr().toLowerCase(Locale.US).contains(cleanQuery);
+
+            if (cleanQuery.isEmpty() || matchHex || matchName || matchDesc) {
+                count++;
+                sb.append("Tag ").append(tag.getHex()).append(" - ").append(tag.getName()).append("\n");
+                sb.append("  Format: ").append(tag.getFormat()).append(" | Tip: ").append(tag.getTagType()).append("\n");
+                sb.append("  Açıklama: ").append(tag.getDescriptionTr()).append("\n\n");
+            }
+        }
+
+        if (count == 0) {
+            tvResults.setText("Aramaya uygun EMV Tag bulunamadı.");
+        } else {
+            tvResults.setText("Bulunan Tag Sayısı: " + count + "\n\n" + sb.toString());
+        }
     }
 
     private void showPinBlockDialog() {
