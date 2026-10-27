@@ -24,7 +24,6 @@ import com.myapp.bankingexample.emv.EmvCryptoUtils;
 import com.myapp.bankingexample.emv.TlvElement;
 import com.myapp.bankingexample.emv.TlvParser;
 import com.myapp.bankingexample.utils.HexUtils;
-import com.myapp.bankingexample.utils.PinBlockCalculator;
 
 import java.util.List;
 import java.util.Locale;
@@ -94,13 +93,10 @@ public class EmvTlvFragment extends Fragment {
 
     private void showPinBlockDialog() {
         if (getContext() == null) return;
-        PinBlockCalculator.PinBlockResult res = PinBlockCalculator.calculateIso0("1234", "4543123456789012");
-        new AlertDialog.Builder(getContext())
-                .setTitle("ISO 9564-1 PIN Block Hesaplayıcı")
-                .setMessage(res.explanation)
-                .setPositiveButton("Kopyala", (dialog, which) -> copyToClipboard(res.pinBlockHex))
-                .setNegativeButton("Kapat", null)
-                .show();
+        PinPadDialog.show(getContext(), "4543123456789012", (pinDigits, pinBlockHex) -> {
+            copyToClipboard(pinBlockHex);
+            Toast.makeText(getContext(), "PIN: " + pinDigits + " | ISO-0 Block: " + pinBlockHex, Toast.LENGTH_LONG).show();
+        });
     }
 
     private void showTvrDialog() {
