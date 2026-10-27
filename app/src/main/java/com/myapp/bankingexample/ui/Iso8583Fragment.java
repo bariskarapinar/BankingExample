@@ -13,21 +13,24 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.myapp.bankingexample.R;
+import com.myapp.bankingexample.iso8583.IsoFieldDictionary;
+import com.myapp.bankingexample.iso8583.IsoFieldSpec;
 import com.myapp.bankingexample.iso8583.IsoFieldValue;
 import com.myapp.bankingexample.iso8583.IsoMessage;
 import com.myapp.bankingexample.iso8583.IsoMessagePacker;
 import com.myapp.bankingexample.iso8583.IsoMessageUnpacker;
 import com.myapp.bankingexample.iso8583.IsoMtiDecoder;
 import com.myapp.bankingexample.iso8583.IsoSampleMessages;
-import com.myapp.bankingexample.utils.HexUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class Iso8583Fragment extends Fragment {
 
@@ -82,7 +85,7 @@ public class Iso8583Fragment extends Fragment {
         });
 
         btnUnpackIso.setOnClickListener(v -> unpackAndDisplay());
-        btnMtiInfo.setOnClickListener(v -> displayMtiInfo());
+        btnMtiInfo.setOnClickListener(v -> displayMtiAndBitmapMatrix());
 
         // Default 0200
         applyPreset(0);
@@ -125,19 +128,40 @@ public class Iso8583Fragment extends Fragment {
         adapter.setFields(list);
     }
 
-    private void displayMtiInfo() {
+    private void displayMtiAndBitmapMatrix() {
+        if (getContext() == null) return;
         String hex = etIsoHex.getText().toString().trim();
         IsoMessage msg = IsoMessageUnpacker.unpackHex(hex);
         IsoMtiDecoder.MtiInfo mtiInfo = IsoMtiDecoder.decode(msg.getMti());
 
-        StringBuilder sb = new StringBuilder();
-        sb.append("=== MTI DETAYLI ANALİZİ ===\n");
-        sb.append("MTI Kodu: ").append(mtiInfo.mti).append("\n");
-        sb.append("ISO Sürümü: ").append(mtiInfo.isoVersion).append("\n");
-        sb.append("Mesaj Sınıfı: ").append(mtiInfo.messageClass).append("\n");
-        sb.append("Mesaj İşlevi: ").append(mtiInfo.messageFunction).append("\n");
-        sb.append("Mesaj Kaynağı: ").append(mtiInfo.messageOrigin);
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_iso_bitmap_grid, null);
+        TextView tvBitmapMatrixHex = dialogView.findViewById(R.id.tvBitmapMatrixHex);
+        TextView tvBitmapMatrixDetails = dialogView.findViewById(R.id.tvBitmapMatrixDetails);
 
-        tvIsoHeaderSummary.setText(sb.toString());
+        tvBitmapMatrixHex.setText(String.format(Locale.US, "MTI: %s | Bitmap Hex: %s", mtiInfo.mti, msg.getBitmap().toHex()));
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("=== MTI BİLGİSİ ===\n");
+        sb.append(mtiInfo.getFullDescriptionTr()).append("\n\n");
+
+        sb.append("=== AKTİF SAHALAR MATRİSİ (FIELD MATRIX) ===\n");
+        int maxField = msg.getBitmap().hasSecondaryBitmap() ? 128 : 64;
+        for (int i = 1; i <= maxField; i++) {
+            boolean active = msg.getBitmap().isFieldSet(i);
+            IsoFieldSpec spec = IsoFieldDictionary.getFieldSpec(i);
+            if (active) {
+                sb.append(String.format(Locale.US, "  [✓] Saha %-3d [%-30s]: AKTİF\n", i, spec.getName()));
+            } else {
+                sb.append(String.format(Locale.US, "  [ ] Saha %-3d [%-30s]: -\n", i, spec.getName()));
+            }
+        }
+
+        tvBitmapMatrixDetails.setText(sb.toString());
+
+        new AlertDialog.Builder(getContext())
+                .setTitle("ISO 8583 MTI & Bitmap Matrisi")
+                .setView(dialogView)
+                .setPositiveButton("Kapat", null)
+                .show();
     }
 }
