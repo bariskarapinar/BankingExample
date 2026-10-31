@@ -1,6 +1,8 @@
 package com.myapp.bankingexample.ui;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +34,7 @@ import com.myapp.bankingexample.iso8583.IsoMtiDecoder;
 import com.myapp.bankingexample.iso8583.IsoSampleMessages;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
@@ -57,6 +60,7 @@ public class Iso8583Fragment extends Fragment {
         Button btnUnpackIso = view.findViewById(R.id.btnUnpackIso);
         Button btnMtiInfo = view.findViewById(R.id.btnMtiInfo);
         Button btnAnalyzeField55 = view.findViewById(R.id.btnAnalyzeField55);
+        Button btnFieldLookupTool = view.findViewById(R.id.btnFieldLookupTool);
         RecyclerView rvIsoFields = view.findViewById(R.id.rvIsoFields);
 
         adapter = new IsoFieldAdapter();
@@ -92,6 +96,9 @@ public class Iso8583Fragment extends Fragment {
         btnMtiInfo.setOnClickListener(v -> displayMtiAndBitmapMatrix());
         if (btnAnalyzeField55 != null) {
             btnAnalyzeField55.setOnClickListener(v -> analyzeField55());
+        }
+        if (btnFieldLookupTool != null) {
+            btnFieldLookupTool.setOnClickListener(v -> showFieldLookupDialog());
         }
 
         // Default 0200
@@ -164,6 +171,60 @@ public class Iso8583Fragment extends Fragment {
                 .setMessage(sb.toString())
                 .setPositiveButton("Kapat", null)
                 .show();
+    }
+
+    private void showFieldLookupDialog() {
+        if (getContext() == null) return;
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_field_lookup, null);
+        EditText etFieldSearch = dialogView.findViewById(R.id.etFieldSearch);
+        TextView tvFieldLookupResults = dialogView.findViewById(R.id.tvFieldLookupResults);
+
+        Collection<IsoFieldSpec> allSpecs = IsoFieldDictionary.getAllSpecs();
+        updateFieldLookupResults("", allSpecs, tvFieldLookupResults);
+
+        etFieldSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                updateFieldLookupResults(s.toString(), allSpecs, tvFieldLookupResults);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        new AlertDialog.Builder(getContext())
+                .setTitle("Arama Motorlu ISO 8583 Saha Kataloğu")
+                .setView(dialogView)
+                .setPositiveButton("Kapat", null)
+                .show();
+    }
+
+    private void updateFieldLookupResults(String query, Collection<IsoFieldSpec> allSpecs, TextView tvResults) {
+        String cleanQuery = query.toLowerCase(Locale.US).trim();
+        StringBuilder sb = new StringBuilder();
+        int count = 0;
+
+        for (IsoFieldSpec spec : allSpecs) {
+            boolean matchNum = String.valueOf(spec.getFieldNumber()).contains(cleanQuery);
+            boolean matchName = spec.getName().toLowerCase(Locale.US).contains(cleanQuery);
+            boolean matchDesc = spec.getDescriptionTr().toLowerCase(Locale.US).contains(cleanQuery);
+
+            if (cleanQuery.isEmpty() || matchNum || matchName || matchDesc) {
+                count++;
+                sb.append("Saha (Field) ").append(spec.getFieldNumber()).append(" - ").append(spec.getName()).append("\n");
+                sb.append("  Veri Tipi: ").append(spec.getDataType()).append(" | Uzunluk Tipi: ").append(spec.getLengthType()).append(" (Max ").append(spec.getMaxLen()).append(")\n");
+                sb.append("  Açıklama: ").append(spec.getDescriptionTr()).append("\n\n");
+            }
+        }
+
+        if (count == 0) {
+            tvResults.setText("Aramaya uygun ISO 8583 sahası bulunamadı.");
+        } else {
+            tvResults.setText("Bulunan Saha Sayısı: " + count + "\n\n" + sb.toString());
+        }
     }
 
     private void displayMtiAndBitmapMatrix() {
