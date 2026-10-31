@@ -72,6 +72,14 @@
                     app:backgroundTint="@color/accent" />
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnFieldLookupTool"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="Saha Kataloğu" />
+
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnAnalyzeField55"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
