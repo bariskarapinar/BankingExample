@@ -5,8 +5,21 @@ import com.myapp.bankingexample.utils.HexUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Pure Java BER-TLV (Basic Encoding Rules - Tag Length Value) Parser per ISO/IEC 8825-1 and EMVCo Specifications.
+ *
+ * <p>Handles multi-byte tags (e.g. 0x9F26, 0x5F2A, 0xBF0C), multi-byte variable length fields (e.g. 0x81 0x80),
+ * recursive constructed tag parsing (e.g. 0x6F, 0x70, 0x77, 0xA5), and automatic bitwise explanation enrichment
+ * for security fields such as TVR (Tag 95), AIP (Tag 82), CID (Tag 9F27), and CVM Results (Tag 9F34).</p>
+ */
 public class TlvParser {
 
+    /**
+     * Parses a hex string containing BER-TLV structures into a list of {@link TlvElement} items.
+     *
+     * @param hexString Clean or space-separated hex string
+     * @return List of parsed TLV elements
+     */
     public static List<TlvElement> parseHex(String hexString) {
         if (hexString == null || hexString.trim().isEmpty()) {
             return new ArrayList<>();
@@ -15,6 +28,14 @@ public class TlvParser {
         return parseBytes(bytes, 0, bytes.length);
     }
 
+    /**
+     * Core recursive byte array TLV parser algorithm.
+     *
+     * @param data Byte array payload
+     * @param offset Starting byte index
+     * @param length Payload length
+     * @return List of root {@link TlvElement} nodes
+     */
     public static List<TlvElement> parseBytes(byte[] data, int offset, int length) {
         List<TlvElement> elements = new ArrayList<>();
         int index = offset;
@@ -27,7 +48,7 @@ public class TlvParser {
                 continue;
             }
 
-            // Parse Tag
+            // Parse Tag Field
             int tagStartIndex = index;
             byte b1 = data[index++];
             boolean isMultiByte = (b1 & 0x1F) == 0x1F;
@@ -36,7 +57,7 @@ public class TlvParser {
                 while (index < end) {
                     byte bNext = data[index++];
                     if ((bNext & 0x80) == 0) {
-                        break; // Last byte of multi-byte tag
+                        break; // Bit 8 = 0 indicates last byte of multi-byte tag
                     }
                 }
             }
@@ -46,14 +67,14 @@ public class TlvParser {
 
             if (index >= end) break;
 
-            // Parse Length
+            // Parse Length Field
             int valueLength = 0;
             byte lenByte1 = data[index++];
             if ((lenByte1 & 0x80) == 0) {
                 // Single byte length (0..127)
                 valueLength = lenByte1 & 0x7F;
             } else {
-                // Multi-byte length (81 xx, 82 xx xx)
+                // Multi-byte length header (e.g. 0x81 0x80 -> 128 bytes)
                 int numLenBytes = lenByte1 & 0x7F;
                 for (int i = 0; i < numLenBytes && index < end; i++) {
                     valueLength = (valueLength << 8) | (data[index++] & 0xFF);
@@ -64,7 +85,7 @@ public class TlvParser {
                 valueLength = end - index; // Clip to available length if malformed
             }
 
-            // Parse Value Bytes
+            // Parse Value Field
             byte[] valueBytes = new byte[valueLength];
             if (valueLength > 0) {
                 System.arraycopy(data, index, valueBytes, 0, valueLength);
@@ -73,10 +94,10 @@ public class TlvParser {
 
             TlvElement element = new TlvElement(tagHex, valueBytes);
 
-            // Generate special explanations for known tags (TVR, AIP, CID, CVM)
+            // Enrich known security tags with human-readable bitwise breakdowns
             enrichExplanation(element);
 
-            // Check if tag is constructed
+            // Recursive constructed tag parsing
             EmvTag emvTag = EmvTagDictionary.getTag(tagHex);
             if (emvTag.isConstructed() && valueLength > 0) {
                 List<TlvElement> children = parseBytes(valueBytes, 0, valueLength);
@@ -117,6 +138,12 @@ public class TlvParser {
         }
     }
 
+    /**
+     * Generates a line-by-line bitwise breakdown for 5-byte Terminal Verification Results (TVR - Tag 95).
+     *
+     * @param tvr 5-byte TVR binary array
+     * @return Formatted multi-line Turkish explanation string
+     */
     public static String explainTVR(byte[] tvr) {
         if (tvr == null || tvr.length < 5) return "Geçersiz TVR uzunluğu";
         StringBuilder sb = new StringBuilder();
@@ -163,6 +190,12 @@ public class TlvParser {
         return sb.toString();
     }
 
+    /**
+     * Generates a line-by-line bitwise breakdown for 2-byte Application Interchange Profile (AIP - Tag 82).
+     *
+     * @param aip 2-byte AIP binary array
+     * @return Formatted multi-line Turkish explanation string
+     */
     public static String explainAIP(byte[] aip) {
         if (aip == null || aip.length < 2) return "Geçersiz AIP uzunluğu";
         StringBuilder sb = new StringBuilder();
@@ -180,6 +213,12 @@ public class TlvParser {
         return sb.toString();
     }
 
+    /**
+     * Explains Cryptogram Information Data (CID - Tag 9F27).
+     *
+     * @param cid 1-byte CID value
+     * @return Explanation string
+     */
     public static String explainCID(byte cid) {
         StringBuilder sb = new StringBuilder();
         sb.append("--- Cryptogram Information Data (CID - Tag 9F27) ---\n");
@@ -198,6 +237,12 @@ public class TlvParser {
         return sb.toString();
     }
 
+    /**
+     * Explains CVM Results (Tag 9F34).
+     *
+     * @param cvm 3-byte CVM Result array
+     * @return Explanation string
+     */
     public static String explainCVMResults(byte[] cvm) {
         if (cvm == null || cvm.length < 3) return "Geçersiz CVM Result uzunluğu";
         StringBuilder sb = new StringBuilder();
