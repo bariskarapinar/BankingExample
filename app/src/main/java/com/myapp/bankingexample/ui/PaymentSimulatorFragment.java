@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.myapp.bankingexample.R;
 import com.myapp.bankingexample.simulator.EndToEndPaymentSimulator;
+import com.myapp.bankingexample.utils.ShareUtils;
 
 import java.util.Locale;
 
@@ -29,6 +30,7 @@ public class PaymentSimulatorFragment extends Fragment {
     private View receiptVisualizer;
     private TextView tvCardScheme, tvCardNumber, tvReceiptAmount, tvReceiptPan;
     private SimLogAdapter adapter;
+    private EndToEndPaymentSimulator.SimulationLogResult currentResult;
 
     @Nullable
     @Override
@@ -52,6 +54,7 @@ public class PaymentSimulatorFragment extends Fragment {
         tvReceiptPan = view.findViewById(R.id.tvReceiptPan);
 
         Button btnStartSimulation = view.findViewById(R.id.btnStartSimulation);
+        Button btnShareLogs = view.findViewById(R.id.btnShareLogs);
         RecyclerView rvSimLogs = view.findViewById(R.id.rvSimLogs);
 
         adapter = new SimLogAdapter();
@@ -72,6 +75,17 @@ public class PaymentSimulatorFragment extends Fragment {
         }
 
         btnStartSimulation.setOnClickListener(v -> runSimulation());
+        if (btnShareLogs != null) {
+            btnShareLogs.setOnClickListener(v -> {
+                if (getContext() != null && currentResult != null) {
+                    StringBuilder fullLog = new StringBuilder();
+                    for (String line : currentResult.logs) {
+                        fullLog.append(line).append("\n");
+                    }
+                    ShareUtils.shareText(getContext(), "EMV & ISO 8583 Ödeme Simülasyonu Logu", fullLog.toString());
+                }
+            });
+        }
     }
 
     private void runSimulation() {
@@ -86,9 +100,9 @@ public class PaymentSimulatorFragment extends Fragment {
             etAmount.setText("250.00");
         }
 
-        EndToEndPaymentSimulator.SimulationLogResult result = EndToEndPaymentSimulator.runFullPaymentFlow(cardScheme, amountCents, entryMode);
-        tvSimStatus.setText(result.statusSummary);
-        adapter.setLogs(result.logs);
+        currentResult = EndToEndPaymentSimulator.runFullPaymentFlow(cardScheme, amountCents, entryMode);
+        tvSimStatus.setText(currentResult.statusSummary);
+        adapter.setLogs(currentResult.logs);
 
         // Update Credit Card Visualizer
         tvCardScheme.setText(cardScheme.toUpperCase(Locale.US));
