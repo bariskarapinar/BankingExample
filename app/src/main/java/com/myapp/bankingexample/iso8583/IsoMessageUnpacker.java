@@ -4,12 +4,30 @@ import com.myapp.bankingexample.utils.HexUtils;
 
 import java.nio.charset.StandardCharsets;
 
+/**
+ * ISO 8583-1:1987 Message Decoder &amp; Unpacker Engine.
+ *
+ * <p>Parses raw hex strings or byte arrays into structured {@link IsoMessage} objects.
+ * Decodes MTI, Primary/Secondary Bitmaps, and parses active fields according to field spec rules.</p>
+ */
 public class IsoMessageUnpacker {
 
+    /**
+     * Unpacks a hex string representation of an ISO 8583 message.
+     *
+     * @param hexString Clean hex string
+     * @return Unpacked {@link IsoMessage} model
+     */
     public static IsoMessage unpackHex(String hexString) {
         return unpack(HexUtils.hexToBytes(hexString));
     }
 
+    /**
+     * Unpacks a raw byte array payload of an ISO 8583 message.
+     *
+     * @param bytes Raw payload bytes
+     * @return Unpacked {@link IsoMessage} model
+     */
     public static IsoMessage unpack(byte[] bytes) {
         if (bytes == null || bytes.length < 12) {
             return new IsoMessage("0000");
@@ -17,19 +35,18 @@ public class IsoMessageUnpacker {
 
         int index = 0;
 
-        // Optional TPDU or header check
-        // Standard ASCII ISO 8583 starts with 4-digit MTI (e.g., '0' '1' '0' '0' or '0' '2' '0' '0')
+        // Check for optional TPDU header (e.g. 5-byte TPDU starting with 0x60)
         if (bytes.length >= 16 && (bytes[0] == (byte) 0x60 || bytes[0] == (byte) 0x00)) {
-            // Header present (5 bytes hex/binary TPDU)
             index = 5;
         }
 
+        // Parse MTI (4 ASCII bytes)
         String mti = new String(bytes, index, 4, StandardCharsets.US_ASCII);
         index += 4;
 
         IsoMessage message = new IsoMessage(mti);
 
-        // Check primary bitmap (8 bytes)
+        // Parse Primary Bitmap (8 bytes)
         byte[] primaryBitmapBytes = new byte[8];
         System.arraycopy(bytes, index, primaryBitmapBytes, 0, 8);
         index += 8;
@@ -57,7 +74,7 @@ public class IsoMessageUnpacker {
             if (index >= bytes.length) break;
 
             IsoFieldSpec spec = IsoFieldDictionary.getFieldSpec(fieldNum);
-            int fieldLen = 0;
+            int fieldLen;
 
             if (spec.getLengthType() == IsoFieldSpec.LengthType.LLVAR) {
                 if (index + 2 > bytes.length) break;
@@ -81,7 +98,7 @@ public class IsoMessageUnpacker {
                 fieldLen = spec.getMaxLen();
             }
 
-            String valStr = "";
+            String valStr;
             if (spec.getDataType() == IsoFieldSpec.DataType.BINARY) {
                 if (index + fieldLen > bytes.length) {
                     fieldLen = bytes.length - index;
