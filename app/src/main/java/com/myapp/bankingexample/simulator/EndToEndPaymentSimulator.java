@@ -16,8 +16,24 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * End-to-End Payment Gateway Transaction Orchestrator Simulator.
+ *
+ * <p>Simulates the complete transaction flow across all payment system entities:
+ * <ol>
+ *   <li><b>POS Terminal &amp; EMV Card</b>: Executes APDUs (SELECT AID, GPO, Read Records, 1st Generate AC -> ARQC).</li>
+ *   <li><b>Acquirer POS Gateway</b>: Constructs ISO 8583 0200 Financial Request with Field 55 EMV payload.</li>
+ *   <li><b>Issuer Bank Host Processing</b>: Unpacks ISO 8583 0200, parses Field 55, validates ARQC signature, checks balance, and generates Auth Code 681042 + Tag 91 ARPC.</li>
+ *   <li><b>Host Response Delivery</b>: Constructs ISO 8583 0210 Financial Response.</li>
+ *   <li><b>POS &amp; EMV Card Completion</b>: Delivers Tag 91 (ARPC) &amp; Tag 8A (ARC "00") to smart card via 2nd Generate AC -> TC (0x40) Approval.</li>
+ * </ol>
+ * </p>
+ */
 public class EndToEndPaymentSimulator {
 
+    /**
+     * Container holding simulation log trace and packed ISO 8583 request/response hex streams.
+     */
     public static class SimulationLogResult {
         public String statusSummary;
         public String requestIsoHex;
@@ -25,6 +41,14 @@ public class EndToEndPaymentSimulator {
         public List<String> logs = new ArrayList<>();
     }
 
+    /**
+     * Runs a full end-to-end simulated payment transaction.
+     *
+     * @param cardScheme Card scheme brand (Visa, Mastercard, Troy, Amex)
+     * @param amountCents Amount in smallest currency units (cents / kuruş)
+     * @param entryMode POS Entry Mode ("051" Contact Chip, "071" Contactless NFC)
+     * @return Execution trace logs and packed messages
+     */
     public static SimulationLogResult runFullPaymentFlow(String cardScheme, long amountCents, String entryMode) {
         SimulationLogResult result = new SimulationLogResult();
         List<String> log = result.logs;
