@@ -2,8 +2,23 @@ package com.myapp.bankingexample.utils;
 
 import java.util.Locale;
 
+/**
+ * ISO 9564-1 Personal Identification Number (PIN) Block Calculator &amp; Visualizer.
+ *
+ * <p>Implements ISO 9564-1 Format 0 (ISO-0 / ANSI X9.8) and Format 1 PIN block formatting rules:
+ * <ul>
+ *   <li><b>Format 0 (ISO-0)</b>: {@code PIN Block = Clear PIN Field XOR PAN Field}.
+ *       Used globally in ATM networks and POS EMV cardholder verification.</li>
+ *   <li><b>Format 1</b>: {@code Format 1 = '1' + PIN Length + PIN Digits + Random Fill}.
+ *       Used when PAN is unavailable or for transaction isolation.</li>
+ * </ul>
+ * </p>
+ */
 public class PinBlockCalculator {
 
+    /**
+     * Data container holding PIN block calculation steps, intermediate fields, and explanations.
+     */
     public static class PinBlockResult {
         public String pinBlockHex;
         public String clearPinFieldHex;
@@ -11,13 +26,20 @@ public class PinBlockCalculator {
         public String explanation;
     }
 
+    /**
+     * Calculates an ISO 9564-1 Format 0 (ISO-0 / ANSI X9.8) PIN block with step-by-step XOR breakdown.
+     *
+     * @param pin Plaintext PIN string (4 to 12 digits, e.g. "1234")
+     * @param pan Primary Account Number string (e.g. "4543123456789012")
+     * @return Formatted {@link PinBlockResult}
+     */
     public static PinBlockResult calculateIso0(String pin, String pan) {
         PinBlockResult result = new PinBlockResult();
 
         if (pin == null) pin = "1234";
         if (pan == null || pan.length() < 13) pan = "4543123456789012";
 
-        // 1. PIN Field (16 hex nibbles = 8 bytes)
+        // Step 1: Format Clear PIN Field (16 hex nibbles = 8 bytes)
         // Format: '0' + Length (1 hex) + PIN digits + padded 'F's
         StringBuilder pinSb = new StringBuilder();
         pinSb.append("0").append(String.format(Locale.US, "%X", pin.length())).append(pin);
@@ -26,12 +48,12 @@ public class PinBlockCalculator {
         }
         result.clearPinFieldHex = pinSb.toString();
 
-        // 2. PAN Field (16 hex nibbles = 8 bytes)
+        // Step 2: Format PAN Field (16 hex nibbles = 8 bytes)
         // Format: '0000' + rightmost 12 digits of PAN excluding check digit
         String pan12 = pan.substring(pan.length() - 13, pan.length() - 1);
         result.panFieldHex = "0000" + pan12;
 
-        // 3. XOR (PIN Field XOR PAN Field)
+        // Step 3: Execute Bitwise XOR (Clear PIN Field XOR PAN Field)
         byte[] pinBytes = HexUtils.hexToBytes(result.clearPinFieldHex);
         byte[] panBytes = HexUtils.hexToBytes(result.panFieldHex);
         byte[] xorBytes = new byte[8];
@@ -41,6 +63,7 @@ public class PinBlockCalculator {
         }
         result.pinBlockHex = HexUtils.bytesToHex(xorBytes);
 
+        // Step 4: Build Human-Readable Step-by-Step Explanation String
         StringBuilder sb = new StringBuilder();
         sb.append("--- ISO 9564-1 Format 0 (ISO-0 / ANSI X9.8) PIN Block Hesaplama ---\n");
         sb.append("Girdiler: PIN = ").append(pin).append(" | PAN = ").append(pan).append("\n\n");
@@ -54,6 +77,12 @@ public class PinBlockCalculator {
         return result;
     }
 
+    /**
+     * Calculates an ISO 9564-1 Format 1 PIN block.
+     *
+     * @param pin Plaintext PIN string
+     * @return Formatted {@link PinBlockResult}
+     */
     public static PinBlockResult calculateIso1(String pin) {
         PinBlockResult result = new PinBlockResult();
         if (pin == null) pin = "1234";
