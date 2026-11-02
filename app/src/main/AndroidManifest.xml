@@ -10,12 +10,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.BankingExample">
+        android:theme="@style/Theme.EMVPOSExample">
         <activity
-            android:name=".MainActivity"
+            android:name="com.myapp.emvposexample.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.BankingExample">
+            android:theme="@style/Theme.EMVPOSExample">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
