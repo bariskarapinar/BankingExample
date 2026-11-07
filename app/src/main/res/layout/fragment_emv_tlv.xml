@@ -4,126 +4,162 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="12dp">
+    android:padding="10dp"
+    android:background="#FAFAFA">
 
+    <!-- Compact Control Card -->
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="2dp"
-        android:layout_marginBottom="8dp">
+        app:cardCornerRadius="12dp"
+        app:cardElevation="1dp"
+        app:cardBackgroundColor="@color/card_background"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/divider_color"
+        android:layout_marginBottom="6dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="12dp">
+            android:padding="10dp">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="EMV BER-TLV Ayrıştırıcı &amp; Araçlar"
-                android:textColor="@color/primary"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="6dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hex formatında EMV TLV verisi girin veya interaktif araçları başlatın:"
-                android:textColor="@color/text_secondary"
-                android:textSize="12sp"
-                android:layout_marginBottom="8dp" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="EMV BER-TLV Decoder"
+                    android:textColor="@color/primary"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnParseTlv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="38dp"
+                    app:cornerRadius="8dp"
+                    android:text="PARSE TLV"
+                    android:textSize="11sp"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    app:backgroundTint="@color/accent" />
+            </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:boxCornerRadiusTopStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusBottomEnd="8dp"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etTlvInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="EMV Hex TLV Verisi (Örn: 9F2608...)"
+                    android:hint="Hex Payload (e.g. 9F2608...)"
+                    android:textColor="#09090B"
+                    android:textColorHint="#71717A"
                     android:fontFamily="monospace"
-                    android:textSize="12sp"
-                    android:lines="3"
+                    android:textSize="11sp"
+                    android:lines="2"
                     android:gravity="top|start" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <LinearLayout
+            <!-- Scrollable Tools & Presets Bar -->
+            <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="8dp">
+                android:scrollbars="none"
+                android:layout_marginTop="6dp">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnParseTlv"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Ayrıştır"
-                    app:backgroundTint="@color/accent" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnTagLookupTool"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:text="Tag Sözlüğü" />
+                    android:orientation="horizontal">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnSampleFci"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:text="FCI" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSampleF55"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        app:cornerRadius="8dp"
+                        android:text="Field 55"
+                        android:textSize="11sp"
+                        app:strokeColor="#2563EB"
+                        android:textColor="#2563EB" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnSampleF55"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:text="Saha 55" />
-            </LinearLayout>
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSampleFci"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="4dp"
+                        app:cornerRadius="8dp"
+                        android:text="FCI"
+                        android:textSize="11sp"
+                        app:strokeColor="#2563EB"
+                        android:textColor="#2563EB" />
 
-            <!-- Interactive Extra Tools -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="4dp">
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnTagLookupTool"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="4dp"
+                        app:cornerRadius="8dp"
+                        android:text="Tag Catalog"
+                        android:textSize="11sp"
+                        app:strokeColor="#2563EB"
+                        android:textColor="#2563EB" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnPinBlockTool"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="11sp"
-                    android:text="PIN Block Hesapla" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnPinBlockTool"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="4dp"
+                        app:cornerRadius="8dp"
+                        android:text="PIN Block"
+                        android:textSize="11sp"
+                        app:strokeColor="#2563EB"
+                        android:textColor="#2563EB" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnTvrEditorTool"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="11sp"
-                    android:text="TVR (Tag 95) Analiz" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnTvrEditorTool"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="4dp"
+                        app:cornerRadius="8dp"
+                        android:text="TVR (Tag 95)"
+                        android:textSize="11sp"
+                        app:strokeColor="#2563EB"
+                        android:textColor="#2563EB" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnArqcCalcTool"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="11sp"
-                    android:text="ARQC Demosu" />
-            </LinearLayout>
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnArqcCalcTool"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="4dp"
+                        app:cornerRadius="8dp"
+                        android:text="ARQC Demo"
+                        android:textSize="11sp"
+                        app:strokeColor="#2563EB"
+                        android:textColor="#2563EB" />
+                </LinearLayout>
+            </HorizontalScrollView>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -131,15 +167,19 @@
         android:id="@+id/tvParsedCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ayrıştırılan Tag'ler:"
+        android:text="Parsed Elements Count:"
         android:textColor="@color/primary"
+        android:textSize="12sp"
         android:textStyle="bold"
+        android:layout_marginStart="2dp"
         android:layout_marginBottom="4dp" />
 
+    <!-- Expanded RecyclerView filling all remaining vertical screen space -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvTlvTree"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:scrollbars="vertical" />
 
 </LinearLayout>
