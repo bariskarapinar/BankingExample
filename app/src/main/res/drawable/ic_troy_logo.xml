@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="30dp"
+    android:viewportWidth="48"
+    android:viewportHeight="30">
+    <!-- Troy Cyan/Navy Backing -->
+    <path
+        android:fillColor="#003B70"
+        android:pathData="M0,0h48v30H0z"/>
+    <!-- Yellow Globe Ribbon -->
+    <path
+        android:fillColor="#E3A82B"
+        android:pathData="M8,15c0,-4 8,-8 16,-8s16,4 16,8s-8,8 -16,8s-16,-4 -16,-8z"/>
+    <path
+        android:fillColor="#003B70"
+        android:pathData="M11,15c0,-2.5 6.5,-5 13,-5s13,2.5 13,5s-6.5,5 -13,5s-13,-2.5 -13,-5z"/>
+    <!-- Troy Text -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M14,11h20v3h-8v8h-4v-8h-8z"/>
+</vector>
