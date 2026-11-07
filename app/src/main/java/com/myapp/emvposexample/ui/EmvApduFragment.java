@@ -72,8 +72,8 @@ public class EmvApduFragment extends Fragment {
         };
 
         if (getContext() != null) {
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, presets);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.item_spinner_selected, presets);
+            adapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
             spApduPresets.setAdapter(adapter);
         }
 
@@ -110,7 +110,7 @@ public class EmvApduFragment extends Fragment {
             viewModel.executeApdu(cla, ins, p1, p2, data);
 
         } catch (Exception e) {
-            tvApduResult.setText("Hata: Geçersiz APDU parametresi formatı.");
+            tvApduResult.setText("Error: Invalid APDU parameter hex format.");
         }
     }
 }
