@@ -4,56 +4,59 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="12dp">
+    android:padding="10dp"
+    android:background="#FAFAFA">
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="2dp"
-        android:layout_marginBottom="12dp">
+        app:cardCornerRadius="12dp"
+        app:cardElevation="1dp"
+        app:cardBackgroundColor="@color/card_background"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/divider_color"
+        android:layout_marginBottom="6dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="12dp">
+            android:padding="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ISO 8583 Paketleyici &amp; Çözümleyici"
+                android:text="ISO 8583 Message Packer &amp; Inspector"
                 android:textColor="@color/primary"
-                android:textSize="16sp"
+                android:textSize="15sp"
                 android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Örnek bir ISO mesajı seçin veya ham Hex verisini yapıştırıp ayrıştırın:"
-                android:textColor="@color/text_secondary"
-                android:textSize="12sp"
-                android:layout_marginBottom="8dp" />
 
             <Spinner
                 android:id="@+id/spIsoPresets"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="6dp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:boxCornerRadiusTopStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusBottomEnd="8dp"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etIsoHex"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="ISO 8583 Ham Hex Mesajı"
+                    android:hint="ISO 8583 Hex Stream"
+                    android:textColor="#09090B"
+                    android:textColorHint="#71717A"
                     android:fontFamily="monospace"
-                    android:textSize="12sp"
-                    android:lines="3"
+                    android:textSize="11sp"
+                    android:lines="2"
                     android:gravity="top|start" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -66,51 +69,71 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnUnpackIso"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="38dp"
                     android:layout_weight="1"
-                    android:text="Mesajı Çöz"
+                    app:cornerRadius="8dp"
+                    android:text="UNPACK MESSAGE"
+                    android:textSize="11sp"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
                     app:backgroundTint="@color/accent" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnFieldLookupTool"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:text="Saha Kataloğu" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnAnalyzeField55"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:text="Saha 55 Çip" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnMtiInfo"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="38dp"
                     android:layout_marginStart="4dp"
-                    android:text="Bitmap" />
+                    app:cornerRadius="8dp"
+                    android:text="Bitmap Grid"
+                    android:textSize="11sp"
+                    app:strokeColor="#2563EB"
+                    android:textColor="#2563EB" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnAnalyzeField55"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="38dp"
+                    android:layout_marginStart="4dp"
+                    app:cornerRadius="8dp"
+                    android:text="Field 55 TLVs"
+                    android:textSize="11sp"
+                    app:strokeColor="#2563EB"
+                    android:textColor="#2563EB" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnFieldLookupTool"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="38dp"
+                    android:layout_marginStart="4dp"
+                    app:cornerRadius="8dp"
+                    android:text="Field Catalog"
+                    android:textSize="11sp"
+                    app:strokeColor="#2563EB"
+                    android:textColor="#2563EB" />
             </LinearLayout>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
     <TextView
         android:id="@+id/tvIsoHeaderSummary"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Mesaj Sahaları (Fields):"
-        android:textColor="@color/primary"
-        android:textStyle="bold"
-        android:layout_marginBottom="4dp" />
+        android:background="@color/code_background"
+        android:textColor="@color/code_text"
+        android:fontFamily="monospace"
+        android:textSize="11sp"
+        android:padding="8dp"
+        android:layout_marginBottom="6dp"
+        android:text="MTI: 0200 | Primary Bitmap: 703C058028C08000" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvIsoFields"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:scrollbars="vertical" />
 
 </LinearLayout>
