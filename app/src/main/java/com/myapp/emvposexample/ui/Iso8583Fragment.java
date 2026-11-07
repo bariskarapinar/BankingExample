@@ -98,8 +98,8 @@ public class Iso8583Fragment extends Fragment {
         };
 
         if (getContext() != null) {
-            ArrayAdapter<String> spinAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, presets);
-            spinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            ArrayAdapter<String> spinAdapter = new ArrayAdapter<>(getContext(), R.layout.item_spinner_selected, presets);
+            spinAdapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
             spIsoPresets.setAdapter(spinAdapter);
         }
 
