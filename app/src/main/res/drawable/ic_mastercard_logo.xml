@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="30dp"
+    android:viewportWidth="48"
+    android:viewportHeight="30">
+    <!-- Dark Card Backing -->
+    <path
+        android:fillColor="#1E293B"
+        android:pathData="M0,0h48v30H0z"/>
+    <!-- Red Circle -->
+    <path
+        android:fillColor="#EB001B"
+        android:pathData="M18,15m-10,0a10,10 0 1,0 20,0a10,10 0 1,0 -20,0"/>
+    <!-- Yellow Circle -->
+    <path
+        android:fillColor="#F79E1B"
+        android:pathData="M30,15m-10,0a10,10 0 1,0 20,0a10,10 0 1,0 -20,0"/>
+    <!-- Overlap Center -->
+    <path
+        android:fillColor="#FF5F00"
+        android:pathData="M24,7.8c-2.3,2-3.8,4.9-3.8,8.2s1.5,6.2,3.8,8.2c2.3-2,3.8-4.9,3.8-8.2S26.3,9.8,24,7.8z"/>
+</vector>
