@@ -5,17 +5,27 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="20dp"
-    android:background="@color/code_background">
+    android:background="#FFFFFF">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="POS PIN PAD (LÜTFEN PIN GIRINIZ)"
+        android:text="POS TERMINAL PIN PAD"
         android:gravity="center"
-        android:textColor="@color/white"
-        android:textSize="14sp"
+        android:textColor="#09090B"
+        android:textSize="15sp"
         android:fontFamily="monospace"
         android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="PLEASE ENTER CARD PIN"
+        android:gravity="center"
+        android:textColor="#71717A"
+        android:textSize="11sp"
+        android:layout_marginTop="2dp"
+        android:fontFamily="monospace" />
 
     <!-- Masked PIN Display -->
     <TextView
@@ -23,10 +33,10 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="12dp"
-        android:layout_marginBottom="16dp"
-        android:background="#1E293B"
+        android:layout_marginBottom="12dp"
+        android:background="#F4F4F5"
         android:gravity="center"
-        android:textColor="@color/code_text"
+        android:textColor="#09090B"
         android:textSize="22sp"
         android:letterSpacing="0.4"
         android:fontFamily="monospace"
@@ -38,7 +48,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textColor="#94A3B8"
+        android:textColor="#71717A"
         android:textSize="11sp"
         android:fontFamily="monospace"
         android:text="ISO-0 PIN Block: 041205DCBA9876FE"
@@ -60,9 +70,10 @@
             android:layout_height="60dp"
             android:layout_margin="4dp"
             android:text="1"
-            android:textColor="@color/white"
+            android:textColor="#09090B"
             android:textSize="18sp"
-            app:strokeColor="#334155" />
+            app:cornerRadius="10dp"
+            app:strokeColor="#E4E4E7" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnKey2"
@@ -71,9 +82,10 @@
             android:layout_height="60dp"
             android:layout_margin="4dp"
             android:text="2"
-            android:textColor="@color/white"
+            android:textColor="#09090B"
             android:textSize="18sp"
-            app:strokeColor="#334155" />
+            app:cornerRadius="10dp"
+            app:strokeColor="#E4E4E7" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnKey3"
@@ -82,9 +94,10 @@
             android:layout_height="60dp"
             android:layout_margin="4dp"
             android:text="3"
-            android:textColor="@color/white"
+            android:textColor="#09090B"
             android:textSize="18sp"
-            app:strokeColor="#334155" />
+            app:cornerRadius="10dp"
+            app:strokeColor="#E4E4E7" />
 
         <!-- Row 2 -->
         <com.google.android.material.button.MaterialButton
@@ -94,9 +107,10 @@
             android:layout_height="60dp"
             android:layout_margin="4dp"
             android:text="4"
-            android:textColor="@color/white"
+            android:textColor="#09090B"
             android:textSize="18sp"
-            app:strokeColor="#334155" />
+            app:cornerRadius="10dp"
+            app:strokeColor="#E4E4E7" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnKey5"
@@ -105,9 +119,10 @@
             android:layout_height="60dp"
             android:layout_margin="4dp"
             android:text="5"
-            android:textColor="@color/white"
+            android:textColor="#09090B"
             android:textSize="18sp"
-            app:strokeColor="#334155" />
+            app:cornerRadius="10dp"
+            app:strokeColor="#E4E4E7" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnKey6"
@@ -116,9 +131,10 @@
             android:layout_height="60dp"
             android:layout_margin="4dp"
             android:text="6"
-            android:textColor="@color/white"
+            android:textColor="#09090B"
             android:textSize="18sp"
-            app:strokeColor="#334155" />
+            app:cornerRadius="10dp"
+            app:strokeColor="#E4E4E7" />
 
         <!-- Row 3 -->
         <com.google.android.material.button.MaterialButton
@@ -128,9 +144,10 @@
             android:layout_height="60dp"
             android:layout_margin="4dp"
             android:text="7"
-            android:textColor="@color/white"
+            android:textColor="#09090B"
             android:textSize="18sp"
-            app:strokeColor="#334155" />
+            app:cornerRadius="10dp"
+            app:strokeColor="#E4E4E7" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnKey8"
@@ -139,9 +156,10 @@
             android:layout_height="60dp"
             android:layout_margin="4dp"
             android:text="8"
-            android:textColor="@color/white"
+            android:textColor="#09090B"
             android:textSize="18sp"
-            app:strokeColor="#334155" />
+            app:cornerRadius="10dp"
+            app:strokeColor="#E4E4E7" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnKey9"
@@ -150,9 +168,10 @@
             android:layout_height="60dp"
             android:layout_margin="4dp"
             android:text="9"
-            android:textColor="@color/white"
+            android:textColor="#09090B"
             android:textSize="18sp"
-            app:strokeColor="#334155" />
+            app:cornerRadius="10dp"
+            app:strokeColor="#E4E4E7" />
 
         <!-- Row 4 -->
         <com.google.android.material.button.MaterialButton
@@ -162,7 +181,10 @@
             android:layout_margin="4dp"
             android:text="C"
             android:textSize="16sp"
-            app:backgroundTint="#F59E0B" />
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:cornerRadius="10dp"
+            app:backgroundTint="#D97706" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnKey0"
@@ -171,9 +193,10 @@
             android:layout_height="60dp"
             android:layout_margin="4dp"
             android:text="0"
-            android:textColor="@color/white"
+            android:textColor="#09090B"
             android:textSize="18sp"
-            app:strokeColor="#334155" />
+            app:cornerRadius="10dp"
+            app:strokeColor="#E4E4E7" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnKeyEnter"
@@ -182,7 +205,10 @@
             android:layout_margin="4dp"
             android:text="OK"
             android:textSize="14sp"
-            app:backgroundTint="#16A34A" />
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:cornerRadius="10dp"
+            app:backgroundTint="@color/accent" />
     </GridLayout>
 
 </LinearLayout>
