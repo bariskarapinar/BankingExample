@@ -4,155 +4,234 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="12dp">
+    android:padding="10dp"
+    android:background="#FAFAFA">
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="2dp"
-        android:layout_marginBottom="12dp">
+        app:cardCornerRadius="12dp"
+        app:cardElevation="1dp"
+        app:cardBackgroundColor="@color/card_background"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/divider_color"
+        android:layout_marginBottom="6dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="12dp">
+            android:padding="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ISO 7816 / EMV APDU Komut Simülatörü"
-                android:textColor="@color/primary"
-                android:textSize="16sp"
+                android:text="ISO 7816 / EMV APDU Command Simulator"
+                android:textColor="#2563EB"
+                android:textSize="15sp"
                 android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hazır komut şablonunu seçin veya doğrudan APDU parametrelerini düzenleyin:"
-                android:textColor="@color/text_secondary"
-                android:textSize="12sp"
-                android:layout_marginBottom="8dp" />
 
             <Spinner
                 android:id="@+id/spApduPresets"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
+                android:background="@drawable/bg_param_box"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:layout_marginTop="6dp"
                 android:layout_marginBottom="8dp" />
 
+            <!-- APDU Header Parameters (CLA, INS, P1, P2) -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <com.google.android.material.textfield.TextInputLayout
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-                    <com.google.android.material.textfield.TextInputEditText
+                    android:orientation="vertical"
+                    android:background="@drawable/bg_param_box"
+                    android:padding="6dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="CLA"
+                        android:textColor="#2563EB"
+                        android:textSize="9sp"
+                        android:textStyle="bold" />
+
+                    <EditText
                         android:id="@+id/etCla"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="CLA"
+                        android:background="@null"
+                        android:text="00"
+                        android:textColor="#2563EB"
                         android:fontFamily="monospace"
-                        android:maxLength="2"
-                        android:text="00" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:textStyle="bold"
+                        android:textSize="13sp"
+                        android:gravity="center"
+                        android:inputType="textCapCharacters" />
+                </LinearLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginStart="4dp"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-                    <com.google.android.material.textfield.TextInputEditText
+                    android:layout_marginStart="6dp"
+                    android:orientation="vertical"
+                    android:background="@drawable/bg_param_box"
+                    android:padding="6dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="INS"
+                        android:textColor="#2563EB"
+                        android:textSize="9sp"
+                        android:textStyle="bold" />
+
+                    <EditText
                         android:id="@+id/etIns"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="INS"
+                        android:background="@null"
+                        android:text="A4"
+                        android:textColor="#2563EB"
                         android:fontFamily="monospace"
-                        android:maxLength="2"
-                        android:text="A4" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:textStyle="bold"
+                        android:textSize="13sp"
+                        android:gravity="center"
+                        android:inputType="textCapCharacters" />
+                </LinearLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginStart="4dp"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-                    <com.google.android.material.textfield.TextInputEditText
+                    android:layout_marginStart="6dp"
+                    android:orientation="vertical"
+                    android:background="@drawable/bg_param_box"
+                    android:padding="6dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="P1"
+                        android:textColor="#2563EB"
+                        android:textSize="9sp"
+                        android:textStyle="bold" />
+
+                    <EditText
                         android:id="@+id/etP1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="P1"
+                        android:background="@null"
+                        android:text="04"
+                        android:textColor="#2563EB"
                         android:fontFamily="monospace"
-                        android:maxLength="2"
-                        android:text="04" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:textStyle="bold"
+                        android:textSize="13sp"
+                        android:gravity="center"
+                        android:inputType="textCapCharacters" />
+                </LinearLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginStart="4dp"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-                    <com.google.android.material.textfield.TextInputEditText
+                    android:layout_marginStart="6dp"
+                    android:orientation="vertical"
+                    android:background="@drawable/bg_param_box"
+                    android:padding="6dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="P2"
+                        android:textColor="#2563EB"
+                        android:textSize="9sp"
+                        android:textStyle="bold" />
+
+                    <EditText
                         android:id="@+id/etP2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="P2"
+                        android:background="@null"
+                        android:text="00"
+                        android:textColor="#2563EB"
                         android:fontFamily="monospace"
-                        android:maxLength="2"
-                        android:text="00" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:textStyle="bold"
+                        android:textSize="13sp"
+                        android:gravity="center"
+                        android:inputType="textCapCharacters" />
+                </LinearLayout>
             </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                app:boxCornerRadiusTopStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusBottomEnd="8dp"
+                app:boxStrokeColor="#2563EB"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etApduData"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Data Bytes (Hex)"
+                    android:text="31325041592E5359532E4444463031"
+                    android:textColor="#09090B"
+                    android:textColorHint="#71717A"
                     android:fontFamily="monospace"
-                    android:text="31325041592E5359532E4444463031" />
+                    android:textSize="11sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSendApdu"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_marginTop="8dp"
-                android:text="APDU Komutunu Gönder"
+                app:cornerRadius="8dp"
+                android:text="EXECUTE APDU COMMAND"
+                android:textSize="11sp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
                 app:backgroundTint="@color/accent" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="2dp">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="1dp"
+        app:cardBackgroundColor="@color/card_background"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/divider_color">
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="12dp">
+            android:padding="10dp"
+            android:background="#EFF6FF">
 
             <TextView
                 android:id="@+id/tvApduResult"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="monospace"
-                android:textSize="13sp"
-                android:textColor="@color/primary"
-                android:text="APDU simülasyon çıktısı burada görüntülenecektir." />
+                android:textSize="11sp"
+                android:textColor="#2563EB"
+                android:text="APDU execution result log will appear here." />
         </ScrollView>
     </com.google.android.material.card.MaterialCardView>
 
