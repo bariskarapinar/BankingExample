@@ -5,14 +5,14 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="@color/code_background">
+    android:background="#FFFFFF">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="EMV TAG SÖZLÜĞÜ &amp; ARAMA"
+        android:text="EMV TAG CATALOG &amp; DICTIONARY"
         android:gravity="center"
-        android:textColor="@color/white"
+        android:textColor="#09090B"
         android:textSize="14sp"
         android:fontFamily="monospace"
         android:textStyle="bold" />
@@ -22,14 +22,18 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
+        app:boxCornerRadiusTopStart="10dp"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxCornerRadiusBottomEnd="10dp"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etTagSearch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Tag Ara (Örn: 9F26, TVR, AIP, Cryptogram)"
-            android:textColor="@color/white"
+            android:hint="Search Tag (e.g. 9F26, TVR, AIP, Cryptogram)"
+            android:textColor="#09090B"
             android:textSize="12sp"
             android:fontFamily="monospace" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -42,7 +46,7 @@
             android:id="@+id/tvTagLookupResults"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#E2E8F0"
+            android:textColor="#09090B"
             android:textSize="11sp"
             android:fontFamily="monospace"
             android:padding="6dp" />
