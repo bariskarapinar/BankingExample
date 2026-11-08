@@ -5,14 +5,14 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="@color/code_background">
+    android:background="#FFFFFF">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ISO 8583 DİNAMİK BITMAP MATRİSİ"
+        android:text="ISO 8583 DYNAMIC BITMAP MATRIX"
         android:gravity="center"
-        android:textColor="@color/white"
+        android:textColor="#09090B"
         android:textSize="14sp"
         android:fontFamily="monospace"
         android:textStyle="bold" />
@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textColor="@color/code_text"
+        android:textColor="#71717A"
         android:textSize="12sp"
         android:fontFamily="monospace"
         android:layout_marginTop="4dp"
@@ -37,7 +37,7 @@
             android:id="@+id/tvBitmapMatrixDetails"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#E2E8F0"
+            android:textColor="#09090B"
             android:textSize="11sp"
             android:fontFamily="monospace"
             android:padding="8dp" />
