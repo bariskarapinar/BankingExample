@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="48dp"
-    android:height="30dp"
-    android:viewportWidth="48"
-    android:viewportHeight="30">
-    <!-- Amex Cyan Box -->
+    android:width="54dp"
+    android:height="34dp"
+    android:viewportWidth="54"
+    android:viewportHeight="34">
+    <!-- Amex Blue Box -->
     <path
         android:fillColor="#0072C6"
-        android:pathData="M0,0h48v30H0z"/>
-    <!-- Amex White Border -->
+        android:pathData="M2,2h50v30H2z"/>
+    <!-- Outer White Border -->
     <path
         android:fillColor="#FFFFFF"
-        android:pathData="M4,4h40v22H4z"/>
+        android:pathData="M5,5h44v24H5z"/>
     <path
         android:fillColor="#0072C6"
-        android:pathData="M6,6h36v18H6z"/>
+        android:pathData="M7,7h40v20H7z"/>
+    <!-- AMEX Text -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M11,11h6l2,5l2,-5h6v12h-4v-7l-2.5,7h-3L15,18v7h-4V11z M31,11h12v3.5h-8v1h7v3.5h-7v1h8V23H31V11z"/>
 </vector>
