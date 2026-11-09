@@ -13,7 +13,7 @@ public class EmvCryptoTest {
                 "0123456789ABCDEF0123456789ABCDEF",
                 "00A4",
                 25000,
-                "0792",
+                "0840",
                 "0000008000",
                 "12345678",
                 "7C00"
@@ -24,6 +24,6 @@ public class EmvCryptoTest {
         assertNotNull(result.inputDataVectorHex);
         assertNotNull(result.simulatedArqcHex);
         assertEquals(16, result.simulatedArqcHex.length());
-        assertTrue(result.explanation.contains("ARQC KRİPTOGRAM"));
+        assertTrue(result.explanation.contains("ARQC CRYPTOGRAM"));
     }
 }
