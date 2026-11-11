@@ -54,27 +54,37 @@
                     app:backgroundTint="@color/accent" />
             </LinearLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <!-- Custom Royal Blue Hex Payload Input Box -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:boxCornerRadiusTopStart="8dp"
-                app:boxCornerRadiusTopEnd="8dp"
-                app:boxCornerRadiusBottomStart="8dp"
-                app:boxCornerRadiusBottomEnd="8dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                android:orientation="vertical"
+                android:background="@drawable/bg_param_box"
+                android:padding="8dp">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="EMV HEX PAYLOAD"
+                    android:textColor="#2563EB"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:fontFamily="monospace" />
+
+                <EditText
                     android:id="@+id/etTlvInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Hex Payload (e.g. 9F2608...)"
-                    android:textColor="#09090B"
-                    android:textColorHint="#71717A"
+                    android:background="@null"
+                    android:hint="9F2608A1B2C3D4..."
+                    android:textColor="#2563EB"
+                    android:textColorHint="#93C5FD"
                     android:fontFamily="monospace"
                     android:textSize="11sp"
+                    android:textStyle="bold"
                     android:lines="2"
                     android:gravity="top|start" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
 
             <!-- Scrollable Tools & Presets Bar -->
             <HorizontalScrollView
