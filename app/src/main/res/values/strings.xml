@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">EMV &amp; ISO 8583 Protokol Kılavuzu</string>
-    <string name="tab_emv_tlv">EMV TLV Çözücü</string>
-    <string name="tab_emv_apdu">APDU Simülatörü</string>
-    <string name="tab_iso8583">ISO 8583 Paketleyici</string>
-    <string name="tab_simulator">Uçtan Uca Ödeme</string>
-    <string name="tab_knowledge">Bilgi Bankası</string>
+    <string name="app_name">EMVPOSExample - EMV &amp; ISO 8583 Guide</string>
+    <string name="app_subtitle">EMV &amp; ISO 8583 Master Educational Reference</string>
+    <string name="tab_emv_tlv">EMV TLV Decoder</string>
+    <string name="tab_emv_apdu">APDU Simulator</string>
+    <string name="tab_iso8583">ISO 8583 Engine</string>
+    <string name="tab_simulator">End-to-End Flow</string>
+    <string name="tab_knowledge">Knowledge Base</string>
 </resources>
