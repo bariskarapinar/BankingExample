@@ -171,28 +171,36 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <!-- Custom Royal Blue Data Bytes Input Box -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_param_box"
                 android:layout_marginTop="8dp"
-                app:boxCornerRadiusTopStart="8dp"
-                app:boxCornerRadiusTopEnd="8dp"
-                app:boxCornerRadiusBottomStart="8dp"
-                app:boxCornerRadiusBottomEnd="8dp"
-                app:boxStrokeColor="#2563EB"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                android:padding="8dp">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DATA BYTES (HEX)"
+                    android:textColor="#2563EB"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:fontFamily="monospace" />
+
+                <EditText
                     android:id="@+id/etApduData"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Data Bytes (Hex)"
+                    android:background="@null"
                     android:text="31325041592E5359532E4444463031"
-                    android:textColor="#09090B"
-                    android:textColorHint="#71717A"
+                    android:textColor="#2563EB"
+                    android:textColorHint="#93C5FD"
                     android:fontFamily="monospace"
-                    android:textSize="11sp" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSendApdu"
