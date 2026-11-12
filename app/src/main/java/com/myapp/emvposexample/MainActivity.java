@@ -1,0 +1,48 @@
+package com.myapp.emvposexample;
+
+import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager2.widget.ViewPager2;
+
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
+import com.myapp.emvposexample.ui.MainPagerAdapter;
+
+public class MainActivity extends AppCompatActivity {
+
+    private final String[] TAB_TITLES = new String[]{
+            "EMV TLV Decoder",
+            "APDU Simulator",
+            "ISO 8583 Engine",
+            "End-to-End Flow",
+            "Knowledge Base"
+    };
+
+    private final int[] TAB_ICONS = new int[]{
+            R.drawable.ic_emv_chip,
+            R.drawable.ic_apdu_terminal,
+            R.drawable.ic_iso_network,
+            R.drawable.ic_gateway_sim,
+            R.drawable.ic_knowledge_book
+    };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        TabLayout tabLayout = findViewById(R.id.tabLayout);
+        ViewPager2 viewPager = findViewById(R.id.viewPager);
+
+        MainPagerAdapter adapter = new MainPagerAdapter(this);
+        viewPager.setAdapter(adapter);
+
+        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
+            if (position < TAB_TITLES.length) {
+                tab.setText(TAB_TITLES[position]);
+                tab.setIcon(TAB_ICONS[position]);
+            }
+        }).attach();
+    }
+}
