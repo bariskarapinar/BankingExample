@@ -3,53 +3,72 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="12dp"
-    android:background="@color/background_light">
+    android:padding="10dp"
+    android:background="#FAFAFA">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Article 1: EMV 10 Adımlı Yaşam Döngüsü -->
+        <!-- Top Overview Banner Card -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="8dp"
+            app:cardCornerRadius="12dp"
             app:cardElevation="2dp"
+            app:cardBackgroundColor="#2563EB"
             android:layout_marginBottom="12dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="12dp">
+                android:padding="14dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:src="@drawable/ic_knowledge_book"
+                        app:tint="#FFFFFF" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="EMV L2 &amp; ISO 8583 Educational Manual"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="1. EMV Akıllı Kart İşlem Adımları (Lifecycle)"
-                    android:textColor="@color/primary"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="1. Application Selection: PSE (12PAY.SYS.DDF01) veya PPSE okuma.\n2. Initiate Processing: GPO gönderimi ile AIP (Tag 82) ve AFL (Tag 94) alma.\n3. Read Record: AFL rehberliğinde kart rekorlarından PAN, Expiry, Certificate okuma.\n4. Offline Data Auth: SDA (Static), DDA (Dynamic), CDA (Combined) RSA imzası doğrulama.\n5. Processing Restrictions: Son kullanma tarihi ve sürüm kontrolleri.\n6. Cardholder Verification (CVM): Online PIN, Offline PIN, CDCVM veya İmza kontrolü.\n7. Terminal Risk Mgmt: Floor limit ve rastgele online seçimi.\n8. First Generate AC: TVR değerlendirmesi ve ARQC/TC/AAC üretimi.\n9. Online Processing: Field 55 içinde ARQC'yi Host'a iletme ve ARPC alma.\n10. Second Generate AC: Host cevabına göre kartın nihai kararı (TC/AAC)."
-                    android:textColor="@color/text_primary"
-                    android:textSize="12sp"
+                    android:text="Master Reference Guide for Payment Engineers, EMV L2 Kernel Developers &amp; ISO 8583 Integrators."
+                    android:textColor="#DBEAFE"
+                    android:textSize="11sp"
                     android:layout_marginTop="6dp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Article 2: ISO 8583 Mesaj Yapısı ve MTI -->
+        <!-- Module 01: EMV 10-Step Lifecycle -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="2dp"
-            android:layout_marginBottom="12dp">
+            app:cardCornerRadius="12dp"
+            app:cardElevation="1dp"
+            app:cardBackgroundColor="@color/card_background"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/divider_color"
+            android:layout_marginBottom="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -57,31 +76,76 @@
                 android:orientation="vertical"
                 android:padding="12dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="2. ISO 8583 Standart Yapısı ve MTI"
-                    android:textColor="@color/primary"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#EFF6FF"
+                        android:textColor="#2563EB"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:fontFamily="monospace"
+                        android:textStyle="bold"
+                        android:textSize="11sp"
+                        android:text="MODULE 01" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="EMV 10-Step Transaction Lifecycle"
+                        android:textColor="#09090B"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_emv_chip"
+                        app:tint="#2563EB" />
+                </LinearLayout>
+
+                <!-- Sequence Diagram Box -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#EFF6FF"
+                    android:textColor="#2563EB"
+                    android:fontFamily="monospace"
+                    android:textSize="10sp"
+                    android:padding="8dp"
+                    android:layout_marginTop="8dp"
+                    android:text="[Card Insert] -> [SELECT AID] -> [GPO] -> [READ RECORD] -> [Offline Auth] -> [CVM] -> [Risk Mgmt] -> [1st Gen AC (ARQC)] -> [Host 0200/0210] -> [2nd Gen AC (TC)]" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ISO 8583 mesajları 3 ana bileşenden oluşur:\n• MTI (Message Type Identifier): 4 basamaklı mesaj sınıfı (Örn: 0100 Auth, 0200 Financial, 0800 Network).\n  - Hane 1: ISO Versiyonu (0=1987, 1=1993, 2=2003)\n  - Hane 2: Mesaj Sınıfı (1=Auth, 2=Financial, 4=Reversal, 8=Network)\n  - Hane 3: İşlev (0=Request, 1=Response, 2=Advice)\n  - Hane 4: Kaynak (0=Acquirer, 2=Issuer)\n• Primary Bitmap (64 Bit / 8 Bayt): Hangi sahaların pakette var olduğunu belirten bit haritası. Bit 1 aktifse 128 bitlik Secondary Bitmap var demektir.\n• Data Elements (Sahalar 1 - 128): Sabit (FIXED) veya Değişken (LLVAR 2 hane boy, LLLVAR 3 hane boy) uzunluktaki veriler."
-                    android:textColor="@color/text_primary"
-                    android:textSize="12sp"
-                    android:layout_marginTop="6dp" />
+                    android:text="1. Application Selection: Read PSE (12PAY.SYS.DDF01) or PPSE (2PAY.SYS.DDF01).\n2. Initiate Processing: Send GPO command and retrieve AIP (Tag 82) &amp; AFL (Tag 94).\n3. Read Application Data: Read card records (PAN, Expiry Date, Certificates) guided by AFL.\n4. Offline Data Authentication: Verify SDA (Static), DDA (Dynamic), or CDA (Combined) RSA signatures.\n5. Processing Restrictions: Validate Application Effective &amp; Expiration Dates and AUC.\n6. Cardholder Verification (CVM): Evaluate CVM List for Online PIN, Offline PIN, CDCVM, or Signature.\n7. Terminal Risk Management: Check Floor Limit, Random Selection, and Velocity limits.\n8. First Generate AC: Evaluate TVR (Tag 95) and request ARQC (Online) or TC (Offline Approval).\n9. Online Processing: Send Field 55 ICC payload to Bank Host in ISO 8583 0200 and receive 0210.\n10. Second Generate AC: Card validates Host ARPC (Tag 91) and ARC (Tag 8A) to generate final TC."
+                    android:textColor="#09090B"
+                    android:textSize="11sp"
+                    android:lineSpacingExtra="2dp"
+                    android:layout_marginTop="8dp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Article 3: Field 55 EMV Entegrasyonu -->
+        <!-- Module 02: ISO 8583 Message Structure & MTI -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="2dp"
-            android:layout_marginBottom="12dp">
+            app:cardCornerRadius="12dp"
+            app:cardElevation="1dp"
+            app:cardBackgroundColor="@color/card_background"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/divider_color"
+            android:layout_marginBottom="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -89,31 +153,76 @@
                 android:orientation="vertical"
                 android:padding="12dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="3. ISO 8583 Saha 55 (Field 55) &amp; EMV Kriptografisi"
-                    android:textColor="@color/primary"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#EFF6FF"
+                        android:textColor="#2563EB"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:fontFamily="monospace"
+                        android:textStyle="bold"
+                        android:textSize="11sp"
+                        android:text="MODULE 02" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="ISO 8583 Message Structure &amp; MTI"
+                        android:textColor="#09090B"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_iso_network"
+                        app:tint="#2563EB" />
+                </LinearLayout>
+
+                <!-- MTI Matrix Diagram Box -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#EFF6FF"
+                    android:textColor="#2563EB"
+                    android:fontFamily="monospace"
+                    android:textSize="10sp"
+                    android:padding="8dp"
+                    android:layout_marginTop="8dp"
+                    android:text="[MTI Digits: 0200]\n- Position 1 (ISO Version): 0 = 1987, 1 = 1993, 2 = 2003\n- Position 2 (Class): 1 = Auth, 2 = Financial, 4 = Reversal, 8 = Network\n- Position 3 (Function): 0 = Request, 1 = Response, 2 = Advice\n- Position 4 (Origin): 0 = Acquirer, 2 = Issuer" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Saha 55 (Field 55), EMV çip kart verilerinin ISO 8583 mesajı içerisinde pakete eklendiği LLLVAR binary sahadır.\nİstekte Kritik EMV Tag'leri:\n• Tag 9F26: ARQC (Application Cryptogram)\n• Tag 9F27: CID (Cryptogram Information Data - 80=ARQC)\n• Tag 9F10: IAD (Issuer Application Data)\n• Tag 9F37: UN (Unpredictable Number - Rastgele Sayı)\n• Tag 9F36: ATC (Application Transaction Counter)\n• Tag 95: TVR (Terminal Verification Results)\n\nCevapta Dönüş Tag'leri:\n• Tag 91: ARPC (Issuer Authentication Data - Host Kriptogramı)\n• Tag 8A: ARC (Authorization Response Code - '00' Onay)."
-                    android:textColor="@color/text_primary"
-                    android:textSize="12sp"
-                    android:layout_marginTop="6dp" />
+                    android:text="ISO 8583 financial messages consist of 3 primary building blocks:\n• MTI (Message Type Identifier): 4-digit classification code (e.g. 0100 Auth, 0200 Financial, 0420 Reversal, 0800 Network).\n• Primary Bitmap (64 Bits / 8 Bytes): Bitmask indicating field presence. If Bit 1 is active, a 128-bit Secondary Bitmap is present.\n• Data Elements (Fields 1 to 128): Payload elements with FIXED or VARIABLE (LLVAR 2-digit, LLLVAR 3-digit length header) definitions."
+                    android:textColor="#09090B"
+                    android:textSize="11sp"
+                    android:lineSpacingExtra="2dp"
+                    android:layout_marginTop="8dp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Article 4: PIN Block Formatları -->
+        <!-- Module 03: Field 55 ICC Data & Cryptograms -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="2dp"
-            android:layout_marginBottom="12dp">
+            app:cardCornerRadius="12dp"
+            app:cardElevation="1dp"
+            app:cardBackgroundColor="@color/card_background"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/divider_color"
+            android:layout_marginBottom="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -121,21 +230,376 @@
                 android:orientation="vertical"
                 android:padding="12dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="4. PIN Block Formatları (ISO 9564-1)"
-                    android:textColor="@color/primary"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#EFF6FF"
+                        android:textColor="#2563EB"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:fontFamily="monospace"
+                        android:textStyle="bold"
+                        android:textSize="11sp"
+                        android:text="MODULE 03" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="Field 55 ICC Payload &amp; Cryptograms"
+                        android:textColor="#09090B"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_apdu_terminal"
+                        app:tint="#2563EB" />
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ISO 8583 Saha 52 içerisinde şifreli olarak taşınan PIN bloğu formatları:\n• Format 0 (ISO-0 / ANSI X9.8): PIN Bloğu (04 PIN F... F) XOR (0000 + PAN sağdan 12 hane).\n• Format 1: Rastgele doldurma içerir, PAN ile XOR uygulanmaz.\n• Format 3: Format 0 benzeri olup rastgele basamaklarla güçlendirilmiştir."
-                    android:textColor="@color/text_primary"
-                    android:textSize="12sp"
-                    android:layout_marginTop="6dp" />
+                    android:text="Field 55 is an LLLVAR binary container embedding BER-TLV chip tags into ISO 8583 messages.\nCritical Tags in Request (0200):\n• Tag 9F26: ARQC (Application Cryptogram - 8 Bytes)\n• Tag 9F27: CID (Cryptogram Information Data - 80=ARQC, 40=TC, 00=AAC)\n• Tag 9F10: IAD (Issuer Application Data)\n• Tag 9F37: UN (Unpredictable Number - 4 Bytes Random Salt)\n• Tag 9F36: ATC (Application Transaction Counter - 2 Bytes)\n• Tag 95: TVR (Terminal Verification Results - 5 Bytes Bitmask)\n\nCritical Tags in Response (0210):\n• Tag 91: ARPC (Issuer Authentication Data - Host Cryptogram)\n• Tag 8A: ARC (Authorization Response Code - '00' Approved)."
+                    android:textColor="#09090B"
+                    android:textSize="11sp"
+                    android:lineSpacingExtra="2dp"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Module 04: ISO 9564-1 PIN Block Formats -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="1dp"
+            app:cardBackgroundColor="@color/card_background"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/divider_color"
+            android:layout_marginBottom="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#EFF6FF"
+                        android:textColor="#2563EB"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:fontFamily="monospace"
+                        android:textStyle="bold"
+                        android:textSize="11sp"
+                        android:text="MODULE 04" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="ISO 9564-1 PIN Block Formats"
+                        android:textColor="#09090B"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- XOR Matrix Box -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#EFF6FF"
+                    android:textColor="#2563EB"
+                    android:fontFamily="monospace"
+                    android:textSize="10sp"
+                    android:padding="8dp"
+                    android:layout_marginTop="8dp"
+                    android:text="[ISO-0 PIN Block Formula]\n  041234FFFFFFFFFF (Clear PIN Field: 0 + Length + PIN + F Fill)\nX 0000454312345678 (PAN Field: 0000 + Rightmost 12 PAN Digits)\n= 041271BCEDCBAB87 (Encrypted PIN Block Output in ISO Field 52)" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Encrypted PIN blocks carried in ISO Field 52:\n• Format 0 (ISO-0 / ANSI X9.8): Clear PIN Field (04 PIN F... F) XOR PAN Field (0000 + PAN rightmost 12 digits excluding Luhn check).\n• Format 1: Uses random padding bytes without PAN XORing (used when PAN is not present).\n• Format 3: Similar to Format 0 with randomized fill digits."
+                    android:textColor="#09090B"
+                    android:textSize="11sp"
+                    android:lineSpacingExtra="2dp"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Module 05: EMV Security & RSA PK Certificates -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="1dp"
+            app:cardBackgroundColor="@color/card_background"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/divider_color"
+            android:layout_marginBottom="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#EFF6FF"
+                        android:textColor="#2563EB"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:fontFamily="monospace"
+                        android:textStyle="bold"
+                        android:textSize="11sp"
+                        android:text="MODULE 05" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="EMV Security &amp; RSA PK Certificates"
+                        android:textColor="#09090B"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- Certificate Trust Chain Diagram Box -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#EFF6FF"
+                    android:textColor="#2563EB"
+                    android:fontFamily="monospace"
+                    android:textSize="10sp"
+                    android:padding="8dp"
+                    android:layout_marginTop="8dp"
+                    android:text="[Scheme Root CA Public Key (Tag 8F)]\n     |\n     v  (Decrypts Tag 90 Certificate)\n[Issuer Public Key (Recovered Modulus &amp; Exponent)]\n     |\n     v  (Decrypts Tag 9F46 Certificate)\n[ICC Chip Public Key (Used for DDA / CDA RSA Signatures)]" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="EMV Offline Data Authentication hierarchy:\n• CA Public Key Index (Tag 8F): Selects Scheme Root CA Public Key stored in terminal hardware.\n• Issuer PK Certificate (Tag 90): Decrypted using CA PK to recover Issuer Public Key.\n• ICC PK Certificate (Tag 9F46): Decrypted using Issuer PK to recover Card Chip PK for DDA/CDA dynamic RSA signatures."
+                    android:textColor="#09090B"
+                    android:textSize="11sp"
+                    android:lineSpacingExtra="2dp"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Module 06: Terminal Risk Management & Action Codes -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="1dp"
+            app:cardBackgroundColor="@color/card_background"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/divider_color"
+            android:layout_marginBottom="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#EFF6FF"
+                        android:textColor="#2563EB"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:fontFamily="monospace"
+                        android:textStyle="bold"
+                        android:textSize="11sp"
+                        android:text="MODULE 06" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="Terminal Risk Management &amp; TACs"
+                        android:textColor="#09090B"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Terminal evaluates TVR (Tag 95) bitmask against 3 Terminal Action Codes:\n• TAC-Denial: Bitmask of conditions requiring immediate offline decline (AAC).\n• TAC-Online: Bitmask of conditions requiring online host approval (ARQC).\n• TAC-Default: Bitmask of conditions used if terminal cannot go online."
+                    android:textColor="#09090B"
+                    android:textSize="11sp"
+                    android:lineSpacingExtra="2dp"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Module 07: Contactless NFC Entry Modes -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="1dp"
+            app:cardBackgroundColor="@color/card_background"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/divider_color"
+            android:layout_marginBottom="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#EFF6FF"
+                        android:textColor="#2563EB"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:fontFamily="monospace"
+                        android:textStyle="bold"
+                        android:textSize="11sp"
+                        android:text="MODULE 07" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="Contactless EMV NFC Protocols"
+                        android:textColor="#09090B"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_contactless_wave"
+                        app:tint="#2563EB" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Contactless transactions transmit data via 13.56 MHz NFC RF interface:\n• Entry Mode 071: POS entry mode code designating EMV Contactless NFC.\n• Entry Mode 051: POS entry mode code designating EMV Contact Chip slot.\n• TTQ (Terminal Transaction Qualifiers - Tag 9F66): 3-byte field conveying contactless reader capabilities (Offline Only, Online Required, CDCVM Supported).\n• CDCVM (Consumer Device Cardholder Verification Method): Biometric unlock (Fingerprint / FaceID) on mobile wallets (Apple Pay / Google Pay)."
+                    android:textColor="#09090B"
+                    android:textSize="11sp"
+                    android:lineSpacingExtra="2dp"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Module 08: Field 48 & Field 39 Response Dictionary -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="1dp"
+            app:cardBackgroundColor="@color/card_background"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/divider_color"
+            android:layout_marginBottom="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#EFF6FF"
+                        android:textColor="#2563EB"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:fontFamily="monospace"
+                        android:textStyle="bold"
+                        android:textSize="11sp"
+                        android:text="MODULE 08" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="Field 48 Subfields &amp; Field 39 Response Codes"
+                        android:textColor="#09090B"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ISO 8583 Authorization Response Codes (Field 39):\n• 00: Approved / Transaction Successful\n• 51: Declined / Insufficient Funds\n• 54: Declined / Expired Card\n• 55: Declined / Incorrect PIN\n• 91: Issuer Host Unavailable / System Malfunction\n\nField 48 Private Data Subfield Container:\nCarries TLV subfields (Tag 01 Terminal City, Tag 02 Merchant Risk Score, Tag 03 Installment Plan Count)."
+                    android:textColor="#09090B"
+                    android:textSize="11sp"
+                    android:lineSpacingExtra="2dp"
+                    android:layout_marginTop="8dp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
