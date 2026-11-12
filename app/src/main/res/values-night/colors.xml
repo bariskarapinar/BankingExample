@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Modern Minimalist Palette with High-Tech Royal Blue Accent -->
+    <color name="primary">#09090B</color>          <!-- Pitch Black Text/Headers -->
+    <color name="primary_dark">#000000</color>     <!-- Pure Black -->
+    <color name="accent">#2563EB</color>            <!-- Royal Blue -->
+    <color name="accent_light">#EFF6FF</color>      <!-- Light Royal Blue Tint -->
+    <color name="gold_chip">#D97706</color>         <!-- Metallic Gold Chip -->
+    <color name="background_light">#FAFAFA</color>  <!-- Crisp White Off-White Canvas -->
+    <color name="card_background">#FFFFFF</color>   <!-- Pure White Card Surface -->
+    <color name="text_primary">#09090B</color>      <!-- Bold Black Primary Text -->
+    <color name="text_secondary">#71717A</color>    <!-- Muted Zinc Secondary Text -->
+    <color name="code_background">#F4F4F5</color>   <!-- Monospace Light Code Background -->
+    <color name="code_text">#2563EB</color>         <!-- Royal Blue Monospace Code Text -->
+    <color name="success_green">#16A34A</color>     <!-- Clean Green -->
+    <color name="error_red">#DC2626</color>         <!-- Clean Red -->
+    <color name="tag_bg">#EFF6FF</color>            <!-- Soft Royal Blue Tag Fill -->
+    <color name="divider_color">#E4E4E7</color>     <!-- Subtle Zinc Border -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>
