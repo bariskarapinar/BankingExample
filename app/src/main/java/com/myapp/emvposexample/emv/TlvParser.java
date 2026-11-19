@@ -5,8 +5,31 @@ import com.myapp.emvposexample.utils.HexUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Educational Protocol Parser: BER-TLV (Basic Encoding Rules - Tag Length Value) Decoder.
+ *
+ * <p>EMV smart card communication adheres to ISO/IEC 8825-1 BER-TLV binary formatting.
+ * This class provides a recursive stream parser to parse raw hexadecimal chip payloads into
+ * structured {@link TlvElement} trees with technical bitmask breakdowns.</p>
+ *
+ * <h3>BER-TLV Encoding Architecture:</h3>
+ * <ul>
+ *   <li><b>Tag Byte 1 Bit 6 (Constructed Flag):</b> <code>0</code> = Primitive (contains value bytes), <code>1</code> = Constructed (contains nested TLV tags).</li>
+ *   <li><b>Tag Byte 1 Bits 5-1 (Tag Number):</b> If <code>0x1F</code> (11111), the tag is multi-byte (continues into Byte 2).</li>
+ *   <li><b>Tag Byte 2 Bit 8 (Continuation Flag):</b> If <code>1</code>, another tag byte follows; if <code>0</code>, it is the final tag byte.</li>
+ *   <li><b>Length Header Byte 1 Bit 8:</b> If <code>0</code>, single-byte length (0-127 bytes). If <code>1</code>, multi-byte length header (e.g. 0x81 = 1 length byte, 0x82 = 2 length bytes).</li>
+ * </ul>
+ *
+ * @author EMV L2 Kernel Engineering Group
+ */
 public class TlvParser {
 
+    /**
+     * Parses a raw hexadecimal BER-TLV payload string into a list of parsed TLV elements.
+     *
+     * @param hexString Upper or lower-case hexadecimal payload (e.g. "9F2608A1B2C3D4E5F678909F270180").
+     * @return List of parsed top-level {@link TlvElement} nodes.
+     */
     public static List<TlvElement> parseHex(String hexString) {
         if (hexString == null || hexString.trim().isEmpty()) {
             return new ArrayList<>();
@@ -15,25 +38,35 @@ public class TlvParser {
         return parseBytes(bytes, 0, bytes.length);
     }
 
+    /**
+     * Recursively parses a slice of a raw byte array into BER-TLV nodes and nested children.
+     *
+     * @param data   Raw byte buffer.
+     * @param offset Starting byte index.
+     * @param length Number of bytes to decode.
+     * @return List of parsed {@link TlvElement} nodes.
+     */
     public static List<TlvElement> parseBytes(byte[] data, int offset, int length) {
         List<TlvElement> elements = new ArrayList<>();
         int index = offset;
         int end = offset + length;
 
         while (index < end) {
+            // Rule: Ignore null padding bytes (0x00) and trailing fill bytes (0xFF)
             if (data[index] == (byte) 0x00 || data[index] == (byte) 0xFF) {
                 index++;
                 continue;
             }
 
+            // Step 1: Decode BER-TLV Tag (Single-byte vs Multi-byte continuation)
             int tagStartIndex = index;
             byte b1 = data[index++];
-            boolean isMultiByte = (b1 & 0x1F) == 0x1F;
+            boolean isMultiByte = (b1 & 0x1F) == 0x1F; // Check if bits 5-1 are all 1s
 
             if (isMultiByte) {
                 while (index < end) {
                     byte bNext = data[index++];
-                    if ((bNext & 0x80) == 0) {
+                    if ((bNext & 0x80) == 0) { // Bit 8 = 0 signifies the final tag byte
                         break;
                     }
                 }
@@ -44,21 +77,24 @@ public class TlvParser {
 
             if (index >= end) break;
 
+            // Step 2: Decode Length Header (Single-byte vs Multi-byte header)
             int valueLength = 0;
             byte lenByte1 = data[index++];
-            if ((lenByte1 & 0x80) == 0) {
+            if ((lenByte1 & 0x80) == 0) { // Bit 8 = 0: Length is 0 to 127 bytes
                 valueLength = lenByte1 & 0x7F;
-            } else {
+            } else { // Bit 8 = 1: Multi-byte length header (lower 7 bits indicate byte count)
                 int numLenBytes = lenByte1 & 0x7F;
                 for (int i = 0; i < numLenBytes && index < end; i++) {
                     valueLength = (valueLength << 8) | (data[index++] & 0xFF);
                 }
             }
 
+            // Bounds check safeguard
             if (index + valueLength > end) {
                 valueLength = end - index;
             }
 
+            // Step 3: Extract Value Payload Bytes
             byte[] valueBytes = new byte[valueLength];
             if (valueLength > 0) {
                 System.arraycopy(data, index, valueBytes, 0, valueLength);
@@ -67,8 +103,10 @@ public class TlvParser {
 
             TlvElement element = new TlvElement(tagHex, valueBytes);
 
+            // Step 4: Enrich Node with Educational Technical Explanations (TVR, AIP, CID, CVM)
             enrichExplanation(element);
 
+            // Step 5: Recursive Parsing if Tag is Constructed (Bit 6 = 1)
             EmvTag emvTag = EmvTagDictionary.getTag(tagHex);
             if (emvTag.isConstructed() && valueLength > 0) {
                 List<TlvElement> children = parseBytes(valueBytes, 0, valueLength);
@@ -83,6 +121,9 @@ public class TlvParser {
         return elements;
     }
 
+    /**
+     * Inspects parsed tag values and attaches step-by-step technical explanations for key financial tags.
+     */
     private static void enrichExplanation(TlvElement element) {
         String tagHex = element.getTagHex();
         byte[] val = element.getValueBytes();
@@ -111,6 +152,9 @@ public class TlvParser {
         }
     }
 
+    /**
+     * Generates educational explanation for RSA Offline Data Authentication Certificates (Tags 8F, 90, 9F46).
+     */
     public static String explainSdaDdaCda(String tagHex, String valueHex) {
         StringBuilder sb = new StringBuilder();
         sb.append("--- EMV RSA Offline Data Authentication Certificate ---\n");
@@ -129,6 +173,9 @@ public class TlvParser {
         return sb.toString();
     }
 
+    /**
+     * Decodes the 40-bit Terminal Verification Results (TVR - Tag 95) bitmask byte-by-byte.
+     */
     public static String explainTVR(byte[] tvr) {
         if (tvr == null || tvr.length < 5) return "Invalid TVR length";
         StringBuilder sb = new StringBuilder();
@@ -170,6 +217,9 @@ public class TlvParser {
         return sb.toString();
     }
 
+    /**
+     * Decodes the 16-bit Application Interchange Profile (AIP - Tag 82) bitmask.
+     */
     public static String explainAIP(byte[] aip) {
         if (aip == null || aip.length < 2) return "Invalid AIP length";
         StringBuilder sb = new StringBuilder();
@@ -187,6 +237,9 @@ public class TlvParser {
         return sb.toString();
     }
 
+    /**
+     * Decodes Cryptogram Information Data (CID - Tag 9F27) cryptogram types (ARQC, TC, AAC, AAR).
+     */
     public static String explainCID(byte cid) {
         StringBuilder sb = new StringBuilder();
         sb.append("--- Cryptogram Information Data (CID - Tag 9F27) ---\n");
@@ -205,6 +258,9 @@ public class TlvParser {
         return sb.toString();
     }
 
+    /**
+     * Decodes CVM Results (Tag 9F34) bytes (Plaintext PIN, Enciphered PIN, Signature, CDCVM).
+     */
     public static String explainCVMResults(byte[] cvm) {
         if (cvm == null || cvm.length < 3) return "Invalid CVM Result length";
         StringBuilder sb = new StringBuilder();
