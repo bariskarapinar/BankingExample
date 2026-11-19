@@ -13,7 +13,7 @@ public class PaymentSimulatorTest {
 
         assertNotNull(result);
         assertNotNull(result.statusSummary);
-        assertTrue(result.statusSummary.contains("ONAYLANDI"));
+        assertTrue(result.statusSummary.contains("APPROVED"));
         assertNotNull(result.requestIsoHex);
         assertNotNull(result.responseIsoHex);
         assertFalse(result.logs.isEmpty());
