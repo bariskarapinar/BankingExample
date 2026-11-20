@@ -34,7 +34,7 @@ public class PaymentSimulatorFragment extends Fragment {
     private View receiptVisualizer;
     private View cardContent;
     private ImageView ivCardLogo;
-    private TextView tvCardScheme, tvCardNumber, tvReceiptAmount, tvReceiptPan;
+    private TextView tvCardNumber, tvReceiptAmount, tvReceiptPan;
     private SimLogAdapter adapter;
     private PaymentSimulatorViewModel viewModel;
     private EndToEndPaymentSimulator.SimulationLogResult currentResult;
@@ -59,7 +59,6 @@ public class PaymentSimulatorFragment extends Fragment {
 
         cardContent = view.findViewById(R.id.cardContent);
         ivCardLogo = view.findViewById(R.id.ivCardLogo);
-        tvCardScheme = view.findViewById(R.id.tvCardScheme);
         tvCardNumber = view.findViewById(R.id.tvCardNumber);
         tvReceiptAmount = view.findViewById(R.id.tvReceiptAmount);
         tvReceiptPan = view.findViewById(R.id.tvReceiptPan);
@@ -133,35 +132,33 @@ public class PaymentSimulatorFragment extends Fragment {
     }
 
     private void updateCardVisualizer(int position) {
-        if (cardContent == null || ivCardLogo == null || tvCardScheme == null || tvCardNumber == null) return;
+        if (cardContent == null || ivCardLogo == null || tvCardNumber == null) return;
 
         switch (position) {
-            case 1: // Mastercard
+            case 1: // Mastercard (Official Red/Yellow Circles Logo)
                 cardContent.setBackgroundResource(R.drawable.bg_card_mastercard);
+                ivCardLogo.setVisibility(View.VISIBLE);
                 ivCardLogo.setImageResource(R.drawable.ic_mastercard_logo);
-                tvCardScheme.setText("MASTERCARD");
                 tvCardNumber.setText("5412  7512  3456  7890");
                 if (tvReceiptPan != null) tvReceiptPan.setText("CARD NO: 5412 **** **** 7890 (C)");
                 break;
-            case 2: // Troy
+            case 2: // Troy (No Logo)
                 cardContent.setBackgroundResource(R.drawable.bg_card_troy);
-                ivCardLogo.setImageResource(R.drawable.ic_troy_logo);
-                tvCardScheme.setText("TROY DEBIT");
+                ivCardLogo.setVisibility(View.GONE);
                 tvCardNumber.setText("9792  0012  3456  7890");
                 if (tvReceiptPan != null) tvReceiptPan.setText("CARD NO: 9792 **** **** 7890 (C)");
                 break;
-            case 3: // American Express
+            case 3: // American Express (No Logo)
                 cardContent.setBackgroundResource(R.drawable.bg_card_amex);
-                ivCardLogo.setImageResource(R.drawable.ic_amex_logo);
-                tvCardScheme.setText("AMEX CENTURION");
+                ivCardLogo.setVisibility(View.GONE);
                 tvCardNumber.setText("3782  821234  56789");
                 if (tvReceiptPan != null) tvReceiptPan.setText("CARD NO: 3782 **** **** 789 (C)");
                 break;
-            case 0: // Visa
+            case 0: // Visa (Official Visa Logo)
             default:
                 cardContent.setBackgroundResource(R.drawable.bg_card_visa);
+                ivCardLogo.setVisibility(View.VISIBLE);
                 ivCardLogo.setImageResource(R.drawable.ic_visa_logo);
-                tvCardScheme.setText("VISA CREDIT");
                 tvCardNumber.setText("4543  1234  5678  9012");
                 if (tvReceiptPan != null) tvReceiptPan.setText("CARD NO: 4543 **** **** 9012 (C)");
                 break;
