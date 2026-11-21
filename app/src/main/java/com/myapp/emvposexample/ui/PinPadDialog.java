@@ -12,13 +12,32 @@ import androidx.appcompat.app.AlertDialog;
 import com.myapp.emvposexample.R;
 import com.myapp.emvposexample.utils.PinBlockCalculator;
 
+/**
+ * Educational UI Component: Simulated POS PIN Pad Overlay Dialog.
+ *
+ * <p>Provides a virtual PIN Pad overlay to simulate cardholder PIN entry during EMV transactions.
+ * Calculates ISO 9564-1 Format 0 (ISO-0 / ANSI X9.8) PIN blocks in real time using the Primary Account Number (PAN).</p>
+ *
+ * @author Android UI & Utilities Group
+ */
 public class PinPadDialog {
 
+    /**
+     * Callback interface triggered when cardholder confirms PIN entry on the virtual PIN Pad.
+     */
     public interface OnPinEnteredListener {
         void onPinEntered(String pinDigits, String pinBlockHex);
     }
 
+    /**
+     * Inflates and displays the virtual POS PIN Pad modal dialog.
+     *
+     * @param context  Android Context.
+     * @param pan      Primary Account Number used for ISO-0 PIN block XOR calculation.
+     * @param listener Callback listener receiving confirmed PIN digits and PIN block hex.
+     */
     public static void show(@NonNull Context context, String pan, @NonNull OnPinEnteredListener listener) {
+        // Step 1: Inflate custom PIN Pad layout
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_emv_pinpad, null);
 
         TextView tvPinDisplay = view.findViewById(R.id.tvPinDisplay);
@@ -26,10 +45,12 @@ public class PinPadDialog {
 
         StringBuilder pinSb = new StringBuilder();
 
+        // Step 2: Build Material Alert Dialog
         AlertDialog dialog = new AlertDialog.Builder(context)
                 .setView(view)
                 .create();
 
+        // Step 3: Attach Click Listener for Numeric Keypad Buttons (0 to 9)
         View.OnClickListener numberClickListener = v -> {
             if (pinSb.length() < 6) {
                 Button btn = (Button) v;
@@ -50,6 +71,7 @@ public class PinPadDialog {
             }
         }
 
+        // Step 4: Attach Click Listener for CLEAR (Delete) Button
         Button btnKeyClear = view.findViewById(R.id.btnKeyClear);
         if (btnKeyClear != null) {
             btnKeyClear.setOnClickListener(v -> {
@@ -60,6 +82,7 @@ public class PinPadDialog {
             });
         }
 
+        // Step 5: Attach Click Listener for ENTER (Confirm) Button
         Button btnKeyEnter = view.findViewById(R.id.btnKeyEnter);
         if (btnKeyEnter != null) {
             btnKeyEnter.setOnClickListener(v -> {
@@ -70,12 +93,16 @@ public class PinPadDialog {
             });
         }
 
+        // Initialize display with default preset "1234"
         updatePinDisplay("1234", pan, tvPinDisplay, tvCalculatedPinBlock);
         pinSb.append("1234");
 
         dialog.show();
     }
 
+    /**
+     * Updates masked PIN display dots ("● ● ● ●") and calculates real-time ISO-0 PIN block hex.
+     */
     private static void updatePinDisplay(String pin, String pan, TextView tvDisplay, TextView tvBlock) {
         StringBuilder dots = new StringBuilder();
         for (int i = 0; i < pin.length(); i++) {
@@ -83,7 +110,7 @@ public class PinPadDialog {
             dots.append("●");
         }
         if (dots.length() == 0) {
-            tvDisplay.setText("PIN GIRINIZ");
+            tvDisplay.setText("ENTER PIN");
         } else {
             tvDisplay.setText(dots.toString());
         }
@@ -92,7 +119,7 @@ public class PinPadDialog {
             PinBlockCalculator.PinBlockResult res = PinBlockCalculator.calculateIso0(pin, pan);
             tvBlock.setText("ISO-0 PIN Block: " + res.pinBlockHex);
         } else {
-            tvBlock.setText("ISO-0 PIN Block: (En az 4 hane girin)");
+            tvBlock.setText("ISO-0 PIN Block: (Enter at least 4 digits)");
         }
     }
 }
