@@ -9,19 +9,46 @@ import com.myapp.emvposexample.emv.ApduResponse;
 import com.myapp.emvposexample.emv.EmvApduFactory;
 import com.myapp.emvposexample.utils.HexUtils;
 
+import java.util.Locale;
+
+/**
+ * Educational Architecture ViewModel: ISO 7816 / EMV APDU Command Simulator State Manager.
+ *
+ * <p>Manages reactive LiveData state for APDU command construction, preset selection,
+ * and smart card response SW1/SW2 status word evaluation.</p>
+ *
+ * @author Android Architecture & ViewModel Group
+ */
 public class EmvApduViewModel extends ViewModel {
 
+    // Reactive MutableLiveData holding currently selected or populated APDU Command
     private final MutableLiveData<ApduCommand> selectedCommand = new MutableLiveData<>();
+    // Reactive MutableLiveData holding APDU execution result log string
     private final MutableLiveData<String> executionResultLog = new MutableLiveData<>();
 
+    /**
+     * Returns observable LiveData stream of currently selected {@link ApduCommand}.
+     *
+     * @return Observable LiveData APDU command.
+     */
     public LiveData<ApduCommand> getSelectedCommand() {
         return selectedCommand;
     }
 
+    /**
+     * Returns observable LiveData stream of APDU execution result log string.
+     *
+     * @return Observable LiveData execution log string.
+     */
     public LiveData<String> getExecutionResultLog() {
         return executionResultLog;
     }
 
+    /**
+     * Applies a pre-configured APDU command preset based on Spinner dropdown selection position.
+     *
+     * @param position Selected preset index (0 to 7).
+     */
     public void applyPreset(int position) {
         switch (position) {
             case 0:
@@ -51,19 +78,31 @@ public class EmvApduViewModel extends ViewModel {
         }
     }
 
+    /**
+     * Executes APDU command simulation and generates a detailed step-by-step communication log.
+     *
+     * @param cla  Class byte.
+     * @param ins  Instruction byte.
+     * @param p1   Parameter 1.
+     * @param p2   Parameter 2.
+     * @param data Command payload byte array.
+     */
     public void executeApdu(byte cla, byte ins, byte p1, byte p2, byte[] data) {
-        ApduCommand cmd = new ApduCommand(cla, ins, p1, p2, data, 0x00, "Özel APDU Komutu");
+        // Step 1: Construct APDU Command model
+        ApduCommand cmd = new ApduCommand(cla, ins, p1, p2, data, 0x00, "Custom APDU Command");
 
+        // Step 2: Build Outbound (TX) APDU Log Header
         StringBuilder sb = new StringBuilder();
-        sb.append("=== APDU İLETİŞİM SİMÜLASYONU ===\n\n");
-        sb.append("-> GÖNDERİLEN APDU (TX):\n");
+        sb.append("=== APDU COMMUNICATION SIMULATION ===\n\n");
+        sb.append("-> OUTBOUND APDU COMMAND (TX):\n");
         sb.append("   Hex: ").append(cmd.toHex()).append("\n");
-        sb.append("   CLA: 0x").append(String.format("%02X", cla & 0xFF));
-        sb.append(" | INS: 0x").append(String.format("%02X", ins & 0xFF));
-        sb.append(" | P1: 0x").append(String.format("%02X", p1 & 0xFF));
-        sb.append(" | P2: 0x").append(String.format("%02X", p2 & 0xFF)).append("\n");
+        sb.append("   CLA: 0x").append(String.format(Locale.US, "%02X", cla & 0xFF));
+        sb.append(" | INS: 0x").append(String.format(Locale.US, "%02X", ins & 0xFF));
+        sb.append(" | P1: 0x").append(String.format(Locale.US, "%02X", p1 & 0xFF));
+        sb.append(" | P2: 0x").append(String.format(Locale.US, "%02X", p2 & 0xFF)).append("\n");
         sb.append("   Data: ").append(HexUtils.bytesToHex(data)).append("\n\n");
 
+        // Step 3: Simulate Smart Card Response (RX)
         ApduResponse resp;
         if ((ins & 0xFF) == 0xA4) {
             resp = ApduResponse.fromHex("6F1A840E31325041592E5359532E4444463031A5088801025F2D02656E9000");
@@ -79,11 +118,13 @@ public class EmvApduViewModel extends ViewModel {
             resp = ApduResponse.fromHex("9000");
         }
 
-        sb.append("<- ALINAN KART YANITI (RX):\n");
+        // Step 4: Append Inbound (RX) Card Response to Log
+        sb.append("<- INBOUND CARD RESPONSE (RX):\n");
         sb.append("   Data Hex: ").append(resp.getDataHex()).append("\n");
         sb.append("   Status Words (SW1 SW2): ").append(resp.getSwHex()).append("\n");
-        sb.append("   Durum Açıklaması: ").append(resp.getStatusDescription()).append("\n");
+        sb.append("   Status Word Summary: ").append(resp.getStatusDescription()).append("\n");
 
+        // Step 5: Post updated log string to observers
         executionResultLog.setValue(sb.toString());
     }
 }
