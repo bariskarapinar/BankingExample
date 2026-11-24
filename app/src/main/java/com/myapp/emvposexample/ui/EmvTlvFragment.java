@@ -33,6 +33,14 @@ import com.myapp.emvposexample.viewmodel.EmvTlvViewModel;
 import java.util.Collection;
 import java.util.Locale;
 
+/**
+ * Educational UI Fragment: EMV BER-TLV Decoder & Protocol Inspection Controller.
+ *
+ * <p>Controller for Tab 1 (EMV TLV Decoder). Provides interactive BER-TLV hex payload parsing,
+ * Tag Dictionary lookup dialog, PIN Pad overlay dialog, TVR bitmask analysis dialog, and ARQC crypto demo.</p>
+
+ * @author Android UI & Controllers Group
+ */
 public class EmvTlvFragment extends Fragment {
 
     private EditText etTlvInput;
@@ -43,6 +51,7 @@ public class EmvTlvFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        // Step 1: Inflate Tab 1 layout
         return inflater.inflate(R.layout.fragment_emv_tlv, container, false);
     }
 
@@ -50,19 +59,24 @@ public class EmvTlvFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Step 2: Initialize ViewModel
         viewModel = new ViewModelProvider(this).get(EmvTlvViewModel.class);
 
+        // Step 3: Bind UI widgets
         etTlvInput = view.findViewById(R.id.etTlvInput);
         tvParsedCount = view.findViewById(R.id.tvParsedCount);
         RecyclerView rvTlvTree = view.findViewById(R.id.rvTlvTree);
 
+        // Step 4: Attach RecyclerView adapter
         adapter = new TlvAdapter();
         rvTlvTree.setLayoutManager(new LinearLayoutManager(getContext()));
         rvTlvTree.setAdapter(adapter);
 
+        // Step 5: Observe LiveData state streams
         viewModel.getTlvElements().observe(getViewLifecycleOwner(), elements -> adapter.setElements(elements));
         viewModel.getParsedCountText().observe(getViewLifecycleOwner(), text -> tvParsedCount.setText(text));
 
+        // Step 6: Bind control buttons
         Button btnParseTlv = view.findViewById(R.id.btnParseTlv);
         Button btnTagLookupTool = view.findViewById(R.id.btnTagLookupTool);
         Button btnSampleFci = view.findViewById(R.id.btnSampleFci);
@@ -71,12 +85,15 @@ public class EmvTlvFragment extends Fragment {
         Button btnTvrEditorTool = view.findViewById(R.id.btnTvrEditorTool);
         Button btnArqcCalcTool = view.findViewById(R.id.btnArqcCalcTool);
 
+        // Pre-configured sample payloads
         String sampleFci = "6F1A840E31325041592E5359532E4444463031A5088801025F2D02656E";
         String sampleF55 = "9F2608A1B2C3D4E5F678909F2701809F100706010A03A000009F3704123456789F360200A4950500000080009A032609259C01009F02060000001500005F2A02079282027C009F1A020792";
 
+        // Step 7: Load initial Field 55 payload
         etTlvInput.setText(sampleF55);
         parseAndDisplay();
 
+        // Step 8: Attach button click listeners
         btnParseTlv.setOnClickListener(v -> parseAndDisplay());
         if (btnTagLookupTool != null) {
             btnTagLookupTool.setOnClickListener(v -> showTagLookupDialog());
@@ -97,11 +114,17 @@ public class EmvTlvFragment extends Fragment {
         btnArqcCalcTool.setOnClickListener(v -> showArqcCalcDialog());
     }
 
+    /**
+     * Executes BER-TLV parsing via ViewModel.
+     */
     private void parseAndDisplay() {
         String inputHex = etTlvInput.getText().toString().trim();
         viewModel.parseTlv(inputHex);
     }
 
+    /**
+     * Launches searchable EMV Tag Dictionary modal dialog.
+     */
     private void showTagLookupDialog() {
         if (getContext() == null) return;
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_tag_lookup, null);
@@ -131,6 +154,9 @@ public class EmvTlvFragment extends Fragment {
                 .show();
     }
 
+    /**
+     * Filters Tag Catalog entries based on user query string.
+     */
     private void updateTagLookupResults(String query, Collection<EmvTag> allTags, TextView tvResults) {
         String cleanQuery = query.toLowerCase(Locale.US).trim();
         StringBuilder sb = new StringBuilder();
@@ -156,6 +182,9 @@ public class EmvTlvFragment extends Fragment {
         }
     }
 
+    /**
+     * Launches POS Terminal PIN Pad overlay dialog.
+     */
     private void showPinBlockDialog() {
         if (getContext() == null) return;
         PinPadDialog.show(getContext(), "4543123456789012", (pinDigits, pinBlockHex) -> {
@@ -164,6 +193,9 @@ public class EmvTlvFragment extends Fragment {
         });
     }
 
+    /**
+     * Launches TVR (Tag 95) 40-bit bitmask analysis dialog.
+     */
     private void showTvrDialog() {
         if (getContext() == null) return;
         byte[] sampleTvr = HexUtils.hexToBytes("0000008000");
@@ -176,13 +208,16 @@ public class EmvTlvFragment extends Fragment {
                 .show();
     }
 
+    /**
+     * Launches EMV ARQC Cryptogram calculation demo dialog.
+     */
     private void showArqcCalcDialog() {
         if (getContext() == null) return;
         EmvCryptoUtils.ArqcVectorResult res = EmvCryptoUtils.buildArqcVector(
                 "0123456789ABCDEF0123456789ABCDEF",
                 "00A4",
                 25000,
-                "0792",
+                "0840",
                 "0000008000",
                 "12345678",
                 "7C00"
@@ -195,6 +230,9 @@ public class EmvTlvFragment extends Fragment {
                 .show();
     }
 
+    /**
+     * Copies text to system clipboard.
+     */
     private void copyToClipboard(String text) {
         if (getContext() == null) return;
         ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
